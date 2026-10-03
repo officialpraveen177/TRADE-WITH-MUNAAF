@@ -1,0 +1,981 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TRADE WITH MUNAAF | Master Stock & Options Trading</title>
+    <!-- Inter Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            dark: '#0B0E14',
+                            card: '#151A23',
+                            border: '#232A36',
+                            green: '#00E676',
+                            greenHover: '#00C853',
+                            gold: '#FFD700',
+                            goldLight: '#FFF176',
+                            cyan: '#00E5FF'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    animation: {
+                        'ticker': 'ticker 30s linear infinite',
+                        'pulse-glow': 'pulseGlow 2s infinite',
+                    },
+                    keyframes: {
+                        ticker: {
+                            '0%': { transform: 'translateX(0%)' },
+                            '100%': { transform: 'translateX(-50%)' }
+                        },
+                        pulseGlow: {
+                            '0%, 100%': { boxShadow: '0 0 15px rgba(0, 230, 118, 0.4)' },
+                            '50%': { boxShadow: '0 0 30px rgba(0, 230, 118, 0.8)' }
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #0B0E14;
+            color: #E2E8F0;
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+        }
+        .glass-card {
+            background: rgba(21, 26, 35, 0.75);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .glass-card-glow {
+            background: rgba(21, 26, 35, 0.85);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(0, 230, 118, 0.3);
+            box-shadow: 0 0 25px rgba(0, 230, 118, 0.15);
+        }
+        .text-gradient-gold {
+            background: linear-gradient(135deg, #FFF176 0%, #FFD700 50%, #FF9100 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .text-gradient-green {
+            background: linear-gradient(135deg, #A7F3D0 0%, #00E676 50%, #059669 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0B0E14;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #232A36;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #00E676;
+        }
+    </style>
+</head>
+<body class="antialiased selection:bg-brand-green selection:text-black">
+
+    <header class="fixed top-0 left-0 right-0 z-50 glass-card border-b border-brand-border">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            <!-- Brand Logo -->
+            <a href="#" class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-brand-green to-brand-cyan flex items-center justify-center shadow-lg shadow-brand-green/20">
+                    <i class="fa-solid font-bold fa-chart-line text-black text-xl"></i>
+                </div>
+                <div class="flex flex-col">
+                    <span class="font-black text-lg sm:text-xl tracking-wider text-white">TRADE WITH <span class="text-brand-green">MUNAAF</span></span>
+                    <span class="text-[10px] text-gray-400 tracking-widest uppercase">Learn • Trade • Profit</span>
+                </div>
+            </a>
+
+            <!-- Desktop Nav Links -->
+            <nav class="hidden md:flex items-center gap-8 text-sm font-medium text-gray-300">
+                <a href="#about" class="hover:text-brand-green transition-colors">About Munaaf</a>
+                <a href="#services" class="hover:text-brand-green transition-colors">Offerings</a>
+                <a href="#calculator" class="hover:text-brand-green transition-colors">ROI Calculator</a>
+                <a href="#testimonials" class="hover:text-brand-green transition-colors">Proof & Reviews</a>
+                <a href="#pricing" class="hover:text-brand-green transition-colors">Plans</a>
+                <a href="#faq" class="hover:text-brand-green transition-colors">FAQ</a>
+            </nav>
+
+            <!-- CTA Header Button -->
+            <div class="hidden sm:flex items-center gap-4">
+                <a href="https://t.me" target="_blank" class="flex items-center gap-2 bg-brand-green text-black font-bold px-5 py-2.5 rounded-full hover:bg-brand-greenHover transition-all transform hover:scale-105 shadow-md shadow-brand-green/20">
+                    <i class="fa-brands fa-telegram text-lg"></i>
+                    <span>Free Telegram</span>
+                </a>
+            </div>
+
+            <!-- Mobile Menu Toggle -->
+            <button id="mobileMenuBtn" class="md:hidden text-gray-300 hover:text-white p-2 text-2xl focus:outline-none">
+                <i class="fa-solid fa-bars"></i>
+            </button>
+        </div>
+
+        <!-- Mobile Drawer Navigation -->
+        <div id="mobileMenu" class="hidden md:hidden glass-card border-b border-brand-border px-4 pt-2 pb-6 space-y-4">
+            <a href="#about" class="mobile-nav-link block text-gray-300 hover:text-brand-green py-2 border-b border-gray-800">About Munaaf</a>
+            <a href="#services" class="mobile-nav-link block text-gray-300 hover:text-brand-green py-2 border-b border-gray-800">Offerings</a>
+            <a href="#calculator" class="mobile-nav-link block text-gray-300 hover:text-brand-green py-2 border-b border-gray-800">ROI Calculator</a>
+            <a href="#testimonials" class="mobile-nav-link block text-gray-300 hover:text-brand-green py-2 border-b border-gray-800">Proof & Reviews</a>
+            <a href="#pricing" class="mobile-nav-link block text-gray-300 hover:text-brand-green py-2 border-b border-gray-800">Plans</a>
+            <a href="#faq" class="mobile-nav-link block text-gray-300 hover:text-brand-green py-2 border-b border-gray-800">FAQ</a>
+            <a href="https://t.me" target="_blank" class="flex items-center justify-center gap-2 bg-brand-green text-black font-bold py-3 rounded-xl w-full">
+                <i class="fa-brands fa-telegram text-lg"></i>
+                <span>Join Telegram Community</span>
+            </a>
+        </div>
+    </header>
+
+    <div class="pt-20 bg-brand-dark overflow-hidden border-b border-brand-border/50 py-2.5 text-xs font-mono">
+        <div class="flex whitespace-nowrap animate-ticker">
+            <div class="flex items-center gap-8 px-4 text-gray-300">
+                <span><strong class="text-white">NIFTY 50:</strong> 23,540.20 <span class="text-brand-green"><i class="fa-solid fa-caret-up"></i> +142.50 (+0.61%)</span></span>
+                <span><strong class="text-white">BANKNIFTY:</strong> 51,210.80 <span class="text-brand-green"><i class="fa-solid fa-caret-up"></i> +380.10 (+0.75%)</span></span>
+                <span><strong class="text-white">FINNIFTY:</strong> 22,980.15 <span class="text-brand-green"><i class="fa-solid fa-caret-up"></i> +95.30 (+0.42%)</span></span>
+                <span><strong class="text-white">ACCURACY RATE:</strong> <span class="text-brand-gold">92% Verified</span></span>
+                <span><strong class="text-white">TODAY'S CALL:</strong> Nifty 23500 CE <span class="text-brand-green">Hit Target 2! 🔥</span></span>
+                <span><strong class="text-white">COMMUNITY:</strong> 50,000+ Active Traders</span>
+            </div>
+            <!-- Duplicated for seamless infinite scrolling loop -->
+            <div class="flex items-center gap-8 px-4 text-gray-300">
+                <span><strong class="text-white">NIFTY 50:</strong> 23,540.20 <span class="text-brand-green"><i class="fa-solid fa-caret-up"></i> +142.50 (+0.61%)</span></span>
+                <span><strong class="text-white">BANKNIFTY:</strong> 51,210.80 <span class="text-brand-green"><i class="fa-solid fa-caret-up"></i> +380.10 (+0.75%)</span></span>
+                <span><strong class="text-white">FINNIFTY:</strong> 22,980.15 <span class="text-brand-green"><i class="fa-solid fa-caret-up"></i> +95.30 (+0.42%)</span></span>
+                <span><strong class="text-white">ACCURACY RATE:</strong> <span class="text-brand-gold">92% Verified</span></span>
+                <span><strong class="text-white">TODAY'S CALL:</strong> Nifty 23500 CE <span class="text-brand-green">Hit Target 2! 🔥</span></span>
+                <span><strong class="text-white">COMMUNITY:</strong> 50,000+ Active Traders</span>
+            </div>
+        </div>
+    </div>
+
+    <section class="relative pt-12 pb-20 md:pt-20 md:pb-32 overflow-hidden bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-brand-card via-brand-dark to-brand-dark">
+        <!-- Ambient decorative background glows -->
+        <div class="absolute top-1/4 left-1/2 -translate-x-1/2 w-[600px] h-[300px] bg-brand-green/10 rounded-full blur-[120px] pointer-events-none"></div>
+        <div class="absolute top-1/3 right-10 w-[300px] h-[300px] bg-brand-cyan/10 rounded-full blur-[100px] pointer-events-none"></div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="grid lg:grid-cols-12 gap-12 items-center">
+                
+                <!-- Left Hero Content -->
+                <div class="lg:col-span-7 text-center lg:text-left space-y-6">
+                    <!-- Badge -->
+                    <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full glass-card border border-brand-green/30 text-xs sm:text-sm font-semibold text-brand-green">
+                        <span class="w-2 h-2 rounded-full bg-brand-green animate-ping"></span>
+                        <span>India's Most Trusted Options Trading Mentorship</span>
+                    </div>
+
+                    <!-- Main Headline -->
+                    <h1 class="text-3xl sm:text-5xl lg:text-6xl font-extrabold text-white leading-tight tracking-tight">
+                        Master Stock & Options Trading with <span class="text-gradient-green">TRADE WITH MUNAAF</span>
+                    </h1>
+
+                    <!-- Hinglish Tagline / Subtitle -->
+                    <p class="text-base sm:text-xl text-gray-300 max-w-2xl mx-auto lg:mx-0 leading-relaxed">
+                        Stop gambling in options. Learn Price Action, Institutional Levels & Psychology. Build a consistent daily income stream with <strong>Disciplined Risk Management</strong>.
+                    </p>
+
+                    <!-- Call To Action Buttons -->
+                    <div class="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 pt-4">
+                        <a href="https://t.me" target="_blank" class="w-full sm:w-auto flex items-center justify-center gap-3 bg-brand-green hover:bg-brand-greenHover text-black font-extrabold text-lg px-8 py-4 rounded-xl shadow-lg shadow-brand-green/25 transition-all transform hover:-translate-y-1 animate-pulse-glow">
+                            <i class="fa-brands fa-telegram text-2xl"></i>
+                            <span>Join Free Telegram Channel</span>
+                        </a>
+                        <a href="#leadFormModal" onclick="openModal()" class="w-full sm:w-auto flex items-center justify-center gap-2 glass-card hover:bg-brand-border text-white font-bold text-lg px-8 py-4 rounded-xl transition-all border border-brand-border">
+                            <i class="fa-solid fa-graduation-cap text-brand-gold"></i>
+                            <span>Enroll in Mentorship</span>
+                        </a>
+                    </div>
+
+                    <!-- Trust Stats Bar -->
+                    <div class="pt-8 border-t border-brand-border/60 grid grid-cols-3 gap-4 text-center lg:text-left">
+                        <div>
+                            <p class="text-2xl sm:text-3xl font-black text-white">50K+</p>
+                            <p class="text-xs sm:text-sm text-gray-400">Active Traders</p>
+                        </div>
+                        <div>
+                            <p class="text-2xl sm:text-3xl font-black text-brand-green">92%</p>
+                            <p class="text-xs sm:text-sm text-gray-400">Signal Accuracy</p>
+                        </div>
+                        <div>
+                            <p class="text-2xl sm:text-3xl font-black text-brand-gold">5+ Yrs</p>
+                            <p class="text-xs sm:text-sm text-gray-400">Market Experience</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Hero Visual / Live Signal Card Simulation -->
+                <div class="lg:col-span-5">
+                    <div class="relative mx-auto max-w-md">
+                        <!-- Background Glow behind preview -->
+                        <div class="absolute -inset-1 bg-gradient-to-r from-brand-green to-brand-cyan rounded-3xl blur opacity-30"></div>
+                        
+                        <div class="relative glass-card-glow rounded-2xl p-6 space-y-5">
+                            <!-- Card Header -->
+                            <div class="flex items-center justify-between pb-4 border-b border-brand-border">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-10 h-10 rounded-full bg-brand-green/20 flex items-center justify-center text-brand-green">
+                                        <i class="fa-solid fa-bolt text-lg"></i>
+                                    </div>
+                                    <div>
+                                        <h3 class="font-bold text-white text-base">VIP Live Alert</h3>
+                                        <p class="text-xs text-gray-400">Posted 2 mins ago</p>
+                                    </div>
+                                </div>
+                                <span class="bg-brand-green/20 text-brand-green text-xs font-semibold px-2.5 py-1 rounded-full border border-brand-green/40">
+                                    <i class="fa-solid fa-circle text-[8px] mr-1 animate-pulse"></i> LIVE TRADE
+                                </span>
+                            </div>
+
+                            <!-- Signal Content -->
+                            <div class="bg-brand-dark/80 rounded-xl p-4 border border-brand-border space-y-3 font-mono text-sm">
+                                <div class="flex justify-between items-center text-brand-gold font-bold text-base">
+                                    <span>BANKNIFTY 51200 CALL (CE)</span>
+                                    <span class="bg-brand-gold/10 text-brand-gold px-2 py-0.5 rounded text-xs">BUY CALL</span>
+                                </div>
+                                <div class="grid grid-cols-2 gap-2 text-xs text-gray-300">
+                                    <div>Buying Range: <strong class="text-white">₹320 - ₹325</strong></div>
+                                    <div>Stoploss: <strong class="text-red-400">₹280</strong></div>
+                                    <div>Target 1: <strong class="text-brand-green">₹370</strong></div>
+                                    <div>Target 2: <strong class="text-brand-green">₹430+</strong></div>
+                                </div>
+                            </div>
+
+                            <!-- Live Profit Notification Simulation -->
+                            <div class="bg-brand-green/10 border border-brand-green/30 rounded-xl p-3 flex items-center justify-between">
+                                <div class="flex items-center gap-2">
+                                    <i class="fa-solid fa-circle-check text-brand-green text-lg"></i>
+                                    <div>
+                                        <p class="text-xs font-bold text-white">Target 2 Achieved! 🎉</p>
+                                        <p class="text-[11px] text-gray-400">Profit: +105 Points per lot</p>
+                                    </div>
+                                </div>
+                                <span class="text-brand-green font-extrabold text-sm">+₹15,750</span>
+                            </div>
+
+                            <p class="text-center text-xs text-gray-400 italic">
+                                "Trade with logic, discipline and strict Stop Loss." – Munaaf
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <section id="about" class="py-20 bg-brand-dark border-t border-brand-border relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid lg:grid-cols-2 gap-12 items-center">
+                
+                <!-- Image / Brand Avatar Showcase -->
+                <div class="relative">
+                    <div class="w-full h-80 sm:h-[420px] rounded-2xl glass-card relative overflow-hidden flex items-center justify-center border border-brand-border">
+                        <!-- Abstract Visual Graphic representing Munaaf -->
+                        <div class="absolute inset-0 bg-gradient-to-tr from-brand-card via-brand-dark to-brand-border opacity-90"></div>
+                        <div class="relative z-10 text-center p-6">
+                            <div class="w-32 h-32 rounded-full bg-gradient-to-tr from-brand-green to-brand-gold p-1 mx-auto mb-4 shadow-xl">
+                                <div class="w-full h-full rounded-full bg-brand-card flex items-center justify-center">
+                                    <i class="fa-solid fa-user-tie text-5xl text-brand-green"></i>
+                                </div>
+                            </div>
+                            <h3 class="text-2xl font-black text-white">MUNAAF</h3>
+                            <p class="text-brand-gold font-medium text-sm">Lead Trader & Market Strategist</p>
+                            <div class="mt-4 inline-flex items-center gap-2 bg-brand-dark/80 px-4 py-2 rounded-full border border-brand-border text-xs text-gray-300">
+                                <i class="fa-solid fa-shield-halved text-brand-green"></i> 5+ Years Market Experience
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Text Content -->
+                <div class="space-y-6">
+                    <div class="inline-block px-3 py-1 rounded-md bg-brand-green/10 text-brand-green text-xs font-bold uppercase tracking-wider">
+                        Why Trade With Munaaf?
+                    </div>
+                    <h2 class="text-3xl sm:text-4xl font-extrabold text-white leading-tight">
+                        "Mera Goal Hai Aapko Independent & Profitable Trader Banana"
+                    </h2>
+                    <p class="text-gray-300 leading-relaxed">
+                        Trading is not a 5-minute gambling scheme. It is a business of probabilities, numbers, and emotional control. At <strong>TRADE WITH MUNAAF</strong>, we eliminate retail trader traps and focus on institutional buying/selling zones.
+                    </p>
+                    
+                    <!-- Core Values Bullet points -->
+                    <div class="space-y-4 pt-2">
+                        <div class="flex items-start gap-4">
+                            <div class="w-8 h-8 rounded-lg bg-brand-green/20 text-brand-green flex items-center justify-center shrink-0 mt-1">
+                                <i class="fa-solid fa-check"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-white text-base">100% Transparency</h4>
+                                <p class="text-sm text-gray-400">No fake promises or guaranteed double-money traps. We share setup logic with every call.</p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-start gap-4">
+                            <div class="w-8 h-8 rounded-lg bg-brand-green/20 text-brand-green flex items-center justify-center shrink-0 mt-1">
+                                <i class="fa-solid fa-calculator"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-white text-base">Strict Risk Management</h4>
+                                <p class="text-sm text-gray-400">Capital Protection comes first. We never trade without a defined Risk-to-Reward ratio (1:2 or higher).</p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-start gap-4">
+                            <div class="w-8 h-8 rounded-lg bg-brand-green/20 text-brand-green flex items-center justify-center shrink-0 mt-1">
+                                <i class="fa-solid fa-headset"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-white text-base">Live Market Handholding</h4>
+                                <p class="text-sm text-gray-400">Get live voice commentary during peak market hours so you never panic during volatility.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <section id="services" class="py-20 bg-brand-card/50 relative border-t border-brand-border">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-16 space-y-4">
+                <span class="px-3 py-1 rounded-md bg-brand-gold/10 text-brand-gold text-xs font-bold uppercase tracking-wider">What We Provide</span>
+                <h2 class="text-3xl sm:text-4xl font-extrabold text-white">Our Core Mentorship & Signals</h2>
+                <p class="text-gray-400 text-base">Designed for both full-time professionals and complete beginners who want to master Indian stock markets.</p>
+            </div>
+
+            <!-- Service Filter Tabs -->
+            <div class="flex justify-center gap-2 sm:gap-4 mb-10 overflow-x-auto pb-2">
+                <button onclick="filterServices('all')" class="service-tab active border border-brand-green bg-brand-green text-black font-bold px-4 py-2 rounded-xl text-sm transition-all">All Offerings</button>
+                <button onclick="filterServices('signals')" class="service-tab border border-brand-border bg-brand-dark text-gray-300 hover:text-white font-medium px-4 py-2 rounded-xl text-sm transition-all">VIP Signals</button>
+                <button onclick="filterServices('mentorship')" class="service-tab border border-brand-border bg-brand-dark text-gray-300 hover:text-white font-medium px-4 py-2 rounded-xl text-sm transition-all">Live Mentorship</button>
+            </div>
+
+            <!-- Services Grid -->
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+                
+                <!-- Service 1 -->
+                <div class="service-card signals glass-card p-6 rounded-2xl hover:border-brand-green/50 transition-all duration-300 group">
+                    <div class="w-12 h-12 rounded-xl bg-brand-green/10 text-brand-green flex items-center justify-center text-2xl mb-6 group-hover:scale-110 transition-transform">
+                        <i class="fa-solid fa-chart-line"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-2">Daily Nifty & BankNifty Levels</h3>
+                    <p class="text-gray-400 text-sm leading-relaxed mb-4">
+                        Pre-market level updates, Key Support/Resistance levels & Option Chain analysis every morning at 8:30 AM.
+                    </p>
+                    <span class="text-xs font-semibold text-brand-green flex items-center gap-1">
+                        Learn More <i class="fa-solid fa-arrow-right text-[10px]"></i>
+                    </span>
+                </div>
+
+                <!-- Service 2 -->
+                <div class="service-card mentorship glass-card p-6 rounded-2xl hover:border-brand-green/50 transition-all duration-300 group">
+                    <div class="w-12 h-12 rounded-xl bg-brand-gold/10 text-brand-gold flex items-center justify-center text-2xl mb-6 group-hover:scale-110 transition-transform">
+                        <i class="fa-solid fa-video"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-2">Live Trading Sessions</h3>
+                    <p class="text-gray-400 text-sm leading-relaxed mb-4">
+                        Trade live alongside Munaaf. Watch real-time screen sharing, live trade execution, and entry-exit reasoning.
+                    </p>
+                    <span class="text-xs font-semibold text-brand-gold flex items-center gap-1">
+                        Learn More <i class="fa-solid fa-arrow-right text-[10px]"></i>
+                    </span>
+                </div>
+
+                <!-- Service 3 -->
+                <div class="service-card signals glass-card p-6 rounded-2xl hover:border-brand-green/50 transition-all duration-300 group">
+                    <div class="w-12 h-12 rounded-xl bg-brand-cyan/10 text-brand-cyan flex items-center justify-center text-2xl mb-6 group-hover:scale-110 transition-transform">
+                        <i class="fa-solid fa-chess-knight"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-2">Options Buying & Selling</h3>
+                    <p class="text-gray-400 text-sm leading-relaxed mb-4">
+                        Master momentum options buying as well as delta-neutral option selling strategies for passive decay.
+                    </p>
+                    <span class="text-xs font-semibold text-brand-cyan flex items-center gap-1">
+                        Learn More <i class="fa-solid fa-arrow-right text-[10px]"></i>
+                    </span>
+                </div>
+
+                <!-- Service 4 -->
+                <div class="service-card mentorship glass-card p-6 rounded-2xl hover:border-brand-green/50 transition-all duration-300 group">
+                    <div class="w-12 h-12 rounded-xl bg-purple-500/10 text-purple-400 flex items-center justify-center text-2xl mb-6 group-hover:scale-110 transition-transform">
+                        <i class="fa-solid fa-brain"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-2">Psychology & Risk Management</h3>
+                    <p class="text-gray-400 text-sm leading-relaxed mb-4">
+                        Overcome FOMO, revenge trading, and over-trading. Custom lot sizing formulas for your personal capital.
+                    </p>
+                    <span class="text-xs font-semibold text-purple-400 flex items-center gap-1">
+                        Learn More <i class="fa-solid fa-arrow-right text-[10px]"></i>
+                    </span>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <section id="calculator" class="py-20 bg-brand-dark border-t border-brand-border">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-2xl mx-auto mb-12 space-y-3">
+                <span class="px-3 py-1 rounded-md bg-brand-green/10 text-brand-green text-xs font-bold uppercase tracking-wider">Interactive Simulator</span>
+                <h2 class="text-3xl sm:text-4xl font-extrabold text-white">Trading Growth Simulator</h2>
+                <p class="text-gray-400 text-sm">Simulate your potential monthly returns with disciplined Risk-to-Reward trading.</p>
+            </div>
+
+            <div class="glass-card-glow p-6 sm:p-10 rounded-3xl grid lg:grid-cols-12 gap-8 items-center">
+                
+                <!-- Calculator Controls -->
+                <div class="lg:col-span-7 space-y-6">
+                    <!-- Capital Slider -->
+                    <div>
+                        <div class="flex justify-between items-center mb-2">
+                            <label class="text-sm font-semibold text-gray-300">Starting Trading Capital</label>
+                            <span id="capitalValue" class="text-lg font-bold text-brand-green">₹50,000</span>
+                        </div>
+                        <input id="capitalInput" type="range" min="10000" max="500000" step="5000" value="50000" 
+                            class="w-full h-2 bg-brand-border rounded-lg appearance-none cursor-pointer accent-brand-green">
+                        <div class="flex justify-between text-xs text-gray-500 mt-1">
+                            <span>₹10,000</span>
+                            <span>₹5,000,000</span>
+                        </div>
+                    </div>
+
+                    <!-- Trades per week -->
+                    <div>
+                        <div class="flex justify-between items-center mb-2">
+                            <label class="text-sm font-semibold text-gray-300">Trades Executed per Week</label>
+                            <span id="tradesValue" class="text-lg font-bold text-brand-gold">10 Trades</span>
+                        </div>
+                        <input id="tradesInput" type="range" min="2" max="25" step="1" value="10" 
+                            class="w-full h-2 bg-brand-border rounded-lg appearance-none cursor-pointer accent-brand-gold">
+                    </div>
+
+                    <!-- Target Win Rate -->
+                    <div>
+                        <div class="flex justify-between items-center mb-2">
+                            <label class="text-sm font-semibold text-gray-300">Expected Win Rate (Munaaf Avg: ~75%-85%)</label>
+                            <span id="winrateValue" class="text-lg font-bold text-brand-cyan">75%</span>
+                        </div>
+                        <input id="winrateInput" type="range" min="50" max="95" step="5" value="75" 
+                            class="w-full h-2 bg-brand-border rounded-lg appearance-none cursor-pointer accent-brand-cyan">
+                    </div>
+                </div>
+
+                <!-- Simulation Output Card -->
+                <div class="lg:col-span-5 bg-brand-dark/90 p-6 rounded-2xl border border-brand-border text-center space-y-6">
+                    <div>
+                        <span class="text-xs uppercase text-gray-400 tracking-wider">Estimated Monthly Profit</span>
+                        <div id="monthlyProfit" class="text-3xl sm:text-4xl font-black text-brand-green mt-1">₹22,500</div>
+                        <span class="text-[11px] text-gray-500 block mt-1">*Based on strict 1:2 Risk-Reward ratio</span>
+                    </div>
+
+                    <div class="pt-4 border-t border-brand-border/60 grid grid-cols-2 gap-4 text-left text-xs">
+                        <div>
+                            <span class="text-gray-400">Risk Per Trade:</span>
+                            <p id="riskPerTrade" class="font-bold text-red-400 text-sm">₹1,000 (2%)</p>
+                        </div>
+                        <div>
+                            <span class="text-gray-400">Reward Per Trade:</span>
+                            <p id="rewardPerTrade" class="font-bold text-brand-green text-sm">₹2,000 (1:2)</p>
+                        </div>
+                    </div>
+
+                    <a href="#pricing" class="block w-full py-3 rounded-xl bg-brand-green hover:bg-brand-greenHover text-black font-extrabold text-sm transition-all shadow-md shadow-brand-green/20">
+                        Start Trading This Plan
+                    </a>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <section id="testimonials" class="py-20 bg-brand-card/30 relative border-t border-brand-border">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-2xl mx-auto mb-16 space-y-3">
+                <span class="px-3 py-1 rounded-md bg-brand-green/10 text-brand-green text-xs font-bold uppercase tracking-wider">Real Student Results</span>
+                <h2 class="text-3xl sm:text-4xl font-extrabold text-white">Trader Reviews & Profit Screenshots</h2>
+                <p class="text-gray-400 text-sm">See how everyday traders transformed their accounts with Munaaf's guidance.</p>
+            </div>
+
+            <!-- Reviews Grid -->
+            <div class="grid md:grid-cols-3 gap-6">
+                
+                <!-- Review Card 1 -->
+                <div class="glass-card p-6 rounded-2xl flex flex-col justify-between space-y-4">
+                    <div class="space-y-3">
+                        <div class="flex items-center gap-1 text-brand-gold text-sm">
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-solid fa-star"></i>
+                        </div>
+                        <p class="text-gray-300 text-sm italic">
+                            "Munaaf sir ka risk management rule seekhne ke baad mera loss hona band ho gaya. BankNifty level perfect accuracy dete hain!"
+                        </p>
+                    </div>
+                    <!-- Profit Screenshot Placeholder -->
+                    <div class="bg-brand-dark p-3 rounded-xl border border-brand-border flex items-center justify-between">
+                        <div class="flex items-center gap-3">
+                            <div class="w-8 h-8 rounded-full bg-brand-green/20 text-brand-green flex items-center justify-center font-bold text-xs">
+                                R
+                            </div>
+                            <div>
+                                <h4 class="text-xs font-bold text-white">Rahul Sharma</h4>
+                                <span class="text-[10px] text-brand-green flex items-center gap-1"><i class="fa-solid fa-circle-check"></i> Verified Member</span>
+                            </div>
+                        </div>
+                        <span class="text-brand-green font-extrabold text-sm">+₹28,400 P&L</span>
+                    </div>
+                </div>
+
+                <!-- Review Card 2 -->
+                <div class="glass-card p-6 rounded-2xl flex flex-col justify-between space-y-4">
+                    <div class="space-y-3">
+                        <div class="flex items-center gap-1 text-brand-gold text-sm">
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-solid fa-star"></i>
+                        </div>
+                        <p class="text-gray-300 text-sm italic">
+                            "Live session during market hours is priceless! Munaaf bhai explain karke trade dete hain ki BUY kyu karna hai."
+                        </p>
+                    </div>
+                    <!-- Profit Screenshot Placeholder -->
+                    <div class="bg-brand-dark p-3 rounded-xl border border-brand-border flex items-center justify-between">
+                        <div class="flex items-center gap-3">
+                            <div class="w-8 h-8 rounded-full bg-brand-cyan/20 text-brand-cyan flex items-center justify-center font-bold text-xs">
+                                A
+                            </div>
+                            <div>
+                                <h4 class="text-xs font-bold text-white">Ankit Verma</h4>
+                                <span class="text-[10px] text-brand-green flex items-center gap-1"><i class="fa-solid fa-circle-check"></i> Pro Student</span>
+                            </div>
+                        </div>
+                        <span class="text-brand-green font-extrabold text-sm">+₹45,100 P&L</span>
+                    </div>
+                </div>
+
+                <!-- Review Card 3 -->
+                <div class="glass-card p-6 rounded-2xl flex flex-col justify-between space-y-4">
+                    <div class="space-y-3">
+                        <div class="flex items-center gap-1 text-brand-gold text-sm">
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-solid fa-star"></i>
+                        </div>
+                        <p class="text-gray-300 text-sm italic">
+                            "Beginner friendly community. Earlier I blew 2 accounts, but after joining VIP Telegram and following strict SL, I recovered my losses."
+                        </p>
+                    </div>
+                    <!-- Profit Screenshot Placeholder -->
+                    <div class="bg-brand-dark p-3 rounded-xl border border-brand-border flex items-center justify-between">
+                        <div class="flex items-center gap-3">
+                            <div class="w-8 h-8 rounded-full bg-brand-gold/20 text-brand-gold flex items-center justify-center font-bold text-xs">
+                                P
+                            </div>
+                            <div>
+                                <h4 class="text-xs font-bold text-white">Pooja Patel</h4>
+                                <span class="text-[10px] text-brand-green flex items-center gap-1"><i class="fa-solid fa-circle-check"></i> VIP Member</span>
+                            </div>
+                        </div>
+                        <span class="text-brand-green font-extrabold text-sm">+₹19,800 P&L</span>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <section id="pricing" class="py-20 bg-brand-dark border-t border-brand-border">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-2xl mx-auto mb-16 space-y-3">
+                <span class="px-3 py-1 rounded-md bg-brand-gold/10 text-brand-gold text-xs font-bold uppercase tracking-wider">Transparent Pricing</span>
+                <h2 class="text-3xl sm:text-4xl font-extrabold text-white">Choose Your Mentorship Plan</h2>
+                <p class="text-gray-400 text-sm">Invest in real market skill. No hidden charges, cancel anytime.</p>
+            </div>
+
+            <!-- Pricing Grid -->
+            <div class="grid lg:grid-cols-3 gap-8 items-stretch">
+                
+                <!-- Plan 1: Free Telegram -->
+                <div class="glass-card p-8 rounded-3xl flex flex-col justify-between border border-brand-border hover:border-gray-600 transition-all">
+                    <div>
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="text-xl font-bold text-white">Starter Free Channel</h3>
+                            <span class="text-xs bg-gray-800 text-gray-300 px-2.5 py-1 rounded-full">Free</span>
+                        </div>
+                        <div class="mb-6">
+                            <span class="text-4xl font-black text-white">₹0</span>
+                            <span class="text-gray-400 text-sm">/ forever</span>
+                        </div>
+                        <ul class="space-y-3 text-sm text-gray-300 mb-8">
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-brand-green"></i> 1-2 Free Educational Calls Daily</li>
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-brand-green"></i> Morning Pre-Market Levels</li>
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-brand-green"></i> Weekly Market Overview Video</li>
+                            <li class="flex items-center gap-2 text-gray-500"><i class="fa-solid fa-xmark"></i> No Live Mentorship Audio</li>
+                            <li class="flex items-center gap-2 text-gray-500"><i class="fa-solid fa-xmark"></i> No Personal Q&A Support</li>
+                        </ul>
+                    </div>
+                    <a href="https://t.me" target="_blank" class="w-full text-center py-3.5 rounded-xl border border-brand-green text-brand-green font-bold text-sm hover:bg-brand-green hover:text-black transition-all">
+                        Join Free Telegram
+                    </a>
+                </div>
+
+                <!-- Plan 2: VIP Signals (POPULAR) -->
+                <div class="glass-card-glow p-8 rounded-3xl flex flex-col justify-between relative transform lg:-translate-y-2">
+                    <div class="absolute -top-3.5 left-1/2 -translate-x-1/2 bg-brand-green text-black font-extrabold text-xs px-4 py-1 rounded-full uppercase tracking-wider">
+                        Most Popular
+                    </div>
+                    <div>
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="text-xl font-bold text-white">VIP Telegram Signals</h3>
+                            <span class="text-xs bg-brand-green/20 text-brand-green px-2.5 py-1 rounded-full border border-brand-green/30">Monthly</span>
+                        </div>
+                        <div class="mb-6">
+                            <span class="text-4xl font-black text-white">₹2,999</span>
+                            <span class="text-gray-400 text-sm">/ month</span>
+                        </div>
+                        <ul class="space-y-3 text-sm text-gray-300 mb-8">
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-brand-green"></i> 3-5 High Probability Trades/Day</li>
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-brand-green"></i> Exact Entry, Target & StopLoss</li>
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-brand-green"></i> Live Voice Commentary in Telegram</li>
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-brand-green"></i> Nifty, BankNifty & FinNifty Index</li>
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-brand-green"></i> Hero-Zero Expiry Special Calls</li>
+                        </ul>
+                    </div>
+                    <button onclick="openModal('VIP Signals Plan')" class="w-full text-center py-3.5 rounded-xl bg-brand-green hover:bg-brand-greenHover text-black font-extrabold text-sm transition-all shadow-lg shadow-brand-green/25">
+                        Get VIP Access Now
+                    </button>
+                </div>
+
+                <!-- Plan 3: Pro Mentorship Batch -->
+                <div class="glass-card p-8 rounded-3xl flex flex-col justify-between border border-brand-border hover:border-brand-gold/50 transition-all">
+                    <div>
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="text-xl font-bold text-white">Pro Mentorship Course</h3>
+                            <span class="text-xs bg-brand-gold/20 text-brand-gold px-2.5 py-1 rounded-full border border-brand-gold/30">Lifetime Access</span>
+                        </div>
+                        <div class="mb-6">
+                            <span class="text-4xl font-black text-white">₹9,999</span>
+                            <span class="text-gray-400 text-sm">/ one-time</span>
+                        </div>
+                        <ul class="space-y-3 text-sm text-gray-300 mb-8">
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-brand-gold"></i> Everything in VIP Signals Included</li>
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-brand-gold"></i> 4-Week Live Masterclass Batch</li>
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-brand-gold"></i> Price Action & Option Chain Mastery</li>
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-brand-gold"></i> 1-on-1 Portfolio & Trade Review</li>
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-brand-gold"></i> Lifetime Mentorship Community</li>
+                        </ul>
+                    </div>
+                    <button onclick="openModal('Pro Mentorship Course')" class="w-full text-center py-3.5 rounded-xl bg-brand-gold hover:bg-yellow-400 text-black font-extrabold text-sm transition-all">
+                        Enroll In Pro Batch
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <section id="faq" class="py-20 bg-brand-card/40 border-t border-brand-border">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16 space-y-3">
+                <span class="px-3 py-1 rounded-md bg-brand-green/10 text-brand-green text-xs font-bold uppercase tracking-wider">Got Questions?</span>
+                <h2 class="text-3xl sm:text-4xl font-extrabold text-white">Frequently Asked Questions</h2>
+            </div>
+
+            <!-- FAQ Accordion Container -->
+            <div class="space-y-4">
+                
+                <!-- FAQ Item 1 -->
+                <div class="glass-card rounded-2xl overflow-hidden border border-brand-border">
+                    <button onclick="toggleFaq(1)" class="w-full flex items-center justify-between p-6 text-left font-bold text-white text-base focus:outline-none">
+                        <span>How much capital do I need to start trading with Munaaf?</span>
+                        <i id="faqIcon-1" class="fa-solid fa-chevron-down text-brand-green transition-transform duration-300"></i>
+                    </button>
+                    <div id="faqAnswer-1" class="hidden px-6 pb-6 text-sm text-gray-400 leading-relaxed border-t border-brand-border/40 pt-4">
+                        You can start options buying with as little as ₹10,000 to ₹15,000. For options selling or index hedging, higher capital (₹1 Lakh+) is recommended. We teach custom position sizing according to your exact capital.
+                    </div>
+                </div>
+
+                <!-- FAQ Item 2 -->
+                <div class="glass-card rounded-2xl overflow-hidden border border-brand-border">
+                    <button onclick="toggleFaq(2)" class="w-full flex items-center justify-between p-6 text-left font-bold text-white text-base focus:outline-none">
+                        <span>Are the trading calls beginner friendly?</span>
+                        <i id="faqIcon-2" class="fa-solid fa-chevron-down text-brand-green transition-transform duration-300"></i>
+                    </button>
+                    <div id="faqAnswer-2" class="hidden px-6 pb-6 text-sm text-gray-400 leading-relaxed border-t border-brand-border/40 pt-4">
+                        Yes! Every signal posted in our VIP Telegram includes the exact Strike Price, Entry Range, Stop Loss (SL), and Target points. We also post audio notes explaining the trade logic.
+                    </div>
+                </div>
+
+                <!-- FAQ Item 3 -->
+                <div class="glass-card rounded-2xl overflow-hidden border border-brand-border">
+                    <button onclick="toggleFaq(3)" class="w-full flex items-center justify-between p-6 text-left font-bold text-white text-base focus:outline-none">
+                        <span>Is there any profit guarantee or fixed income return?</span>
+                        <i id="faqIcon-3" class="fa-solid fa-chevron-down text-brand-green transition-transform duration-300"></i>
+                    </button>
+                    <div id="faqAnswer-3" class="hidden px-6 pb-6 text-sm text-gray-400 leading-relaxed border-t border-brand-border/40 pt-4">
+                        No. Stock market trading carries risk. Anyone promising fixed guaranteed returns is lying. We focus on high probability setups, disciplined risk management, and long-term consistent profitability.
+                    </div>
+                </div>
+
+                <!-- FAQ Item 4 -->
+                <div class="glass-card rounded-2xl overflow-hidden border border-brand-border">
+                    <button onclick="toggleFaq(4)" class="w-full flex items-center justify-between p-6 text-left font-bold text-white text-base focus:outline-none">
+                        <span>How do I get access after making the payment?</span>
+                        <i id="faqIcon-4" class="fa-solid fa-chevron-down text-brand-green transition-transform duration-300"></i>
+                    </button>
+                    <div id="faqAnswer-4" class="hidden px-6 pb-6 text-sm text-gray-400 leading-relaxed border-t border-brand-border/40 pt-4">
+                        Once you submit the enrollment form or complete payment, our automated WhatsApp bot will instantly send you your private VIP Telegram invite link and course portal login details.
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <section class="py-20 bg-gradient-to-b from-brand-dark to-brand-card relative border-t border-brand-border">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="glass-card-glow p-8 sm:p-12 rounded-3xl relative overflow-hidden">
+                <div class="text-center max-w-xl mx-auto mb-8 space-y-3">
+                    <h2 class="text-3xl font-extrabold text-white">Start Your Profitable Trading Journey Today</h2>
+                    <p class="text-gray-300 text-sm">Fill out your details to get a free 1-on-1 call with our advisory team & instant Telegram access.</p>
+                </div>
+
+                <form id="leadForm" onsubmit="handleLeadSubmit(event)" class="space-y-4 max-w-lg mx-auto">
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-300 mb-1">Full Name</label>
+                        <input type="text" required placeholder="e.g. Rahul Sharma" class="w-full bg-brand-dark border border-brand-border rounded-xl px-4 py-3 text-white focus:outline-none focus:border-brand-green text-sm">
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-semibold text-gray-300 mb-1">WhatsApp Phone Number</label>
+                            <input type="tel" required placeholder="+91 98765 43210" class="w-full bg-brand-dark border border-brand-border rounded-xl px-4 py-3 text-white focus:outline-none focus:border-brand-green text-sm">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-gray-300 mb-1">Trading Experience</label>
+                            <select class="w-full bg-brand-dark border border-brand-border rounded-xl px-4 py-3 text-white focus:outline-none focus:border-brand-green text-sm">
+                                <option>Complete Beginner</option>
+                                <option>1 - 6 Months</option>
+                                <option>6 Months - 2 Years</option>
+                                <option>2+ Years (Experienced)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="w-full bg-brand-green hover:bg-brand-greenHover text-black font-extrabold text-base py-4 rounded-xl shadow-lg shadow-brand-green/30 transition-all mt-4">
+                        Get Free Instant Callback & VIP Access
+                    </button>
+                    
+                    <p class="text-[11px] text-gray-500 text-center">🔒 Your information is 100% confidential. No spam guaranteed.</p>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-brand-dark border-t border-brand-border py-10 text-xs text-gray-500">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
+            <div class="flex flex-col sm:flex-row justify-between items-center gap-4">
+                <div class="flex items-center gap-2">
+                    <div class="w-6 h-6 rounded-lg bg-brand-green flex items-center justify-center text-black font-bold">
+                        <i class="fa-solid fa-chart-line text-xs"></i>
+                    </div>
+                    <span class="text-white font-bold tracking-wider">TRADE WITH MUNAAF</span>
+                </div>
+                <div class="flex gap-6 text-gray-400">
+                    <a href="#" class="hover:text-brand-green">Privacy Policy</a>
+                    <a href="#" class="hover:text-brand-green">Terms of Service</a>
+                    <a href="#" class="hover:text-brand-green">Disclaimer</a>
+                </div>
+            </div>
+
+            <!-- Risk Disclaimer -->
+            <div class="bg-brand-card/50 p-4 rounded-xl border border-brand-border/60 text-[11px] leading-relaxed text-gray-400 space-y-2">
+                <p><strong>SEBI Disclaimer:</strong> Investment in securities market are subject to market risks. Read all the related documents carefully before investing. 'TRADE WITH MUNAAF' is an educational brand dedicated to teaching technical analysis, price action, and options strategies. Trading derivatives involves high financial risk.</p>
+                <p>&copy; 2026 TRADE WITH MUNAAF. All Rights Reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <div id="leadModal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden flex items-center justify-center p-4">
+        <div class="glass-card-glow max-w-md w-full rounded-3xl p-6 relative animate-fadeIn space-y-4">
+            <button onclick="closeModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white text-xl">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            
+            <div class="text-center space-y-2">
+                <div class="w-12 h-12 rounded-full bg-brand-green/20 text-brand-green flex items-center justify-center mx-auto text-xl">
+                    <i class="fa-solid fa-rocket"></i>
+                </div>
+                <h3 id="modalTitle" class="text-xl font-bold text-white">Join Trade With Munaaf</h3>
+                <p class="text-xs text-gray-400">Enter details to get instant access to our next live mentorship session.</p>
+            </div>
+
+            <form onsubmit="handleLeadSubmit(event)" class="space-y-3">
+                <input type="text" required placeholder="Full Name" class="w-full bg-brand-dark border border-brand-border rounded-xl px-4 py-3 text-white text-sm focus:outline-none focus:border-brand-green">
+                <input type="tel" required placeholder="WhatsApp Number" class="w-full bg-brand-dark border border-brand-border rounded-xl px-4 py-3 text-white text-sm focus:outline-none focus:border-brand-green">
+                <button type="submit" class="w-full bg-brand-green text-black font-extrabold py-3.5 rounded-xl hover:bg-brand-greenHover transition-all text-sm">
+                    Confirm & Proceed
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Mobile Menu Navigation Toggle
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const mobileMenu = document.getElementById('mobileMenu');
+        const mobileNavLinks = document.querySelectorAll('.mobile-nav-link');
+
+        mobileMenuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        mobileNavLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.add('hidden');
+            });
+        });
+
+        // FAQ Accordion Toggle
+        function toggleFaq(index) {
+            const answer = document.getElementById(`faqAnswer-${index}`);
+            const icon = document.getElementById(`faqIcon-${index}`);
+            
+            if (answer.classList.contains('hidden')) {
+                answer.classList.remove('hidden');
+                icon.style.transform = 'rotate(180deg)';
+            } else {
+                answer.classList.add('hidden');
+                icon.style.transform = 'rotate(0deg)';
+            }
+        }
+
+        // Service Filter Tabs Logic
+        function filterServices(category) {
+            const cards = document.querySelectorAll('.service-card');
+            const tabs = document.querySelectorAll('.service-tab');
+
+            tabs.forEach(tab => {
+                tab.classList.remove('bg-brand-green', 'text-black');
+                tab.classList.add('bg-brand-dark', 'text-gray-300');
+            });
+
+            event.target.classList.remove('bg-brand-dark', 'text-gray-300');
+            event.target.classList.add('bg-brand-green', 'text-black');
+
+            cards.forEach(card => {
+                if (category === 'all' || card.classList.contains(category)) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+
+        // Interactive ROI & Profit Calculator Logic
+        const capitalInput = document.getElementById('capitalInput');
+        const tradesInput = document.getElementById('tradesInput');
+        const winrateInput = document.getElementById('winrateInput');
+
+        const capitalVal = document.getElementById('capitalValue');
+        const tradesVal = document.getElementById('tradesValue');
+        const winrateVal = document.getElementById('winrateValue');
+
+        const monthlyProfitEl = document.getElementById('monthlyProfit');
+        const riskPerTradeEl = document.getElementById('riskPerTrade');
+        const rewardPerTradeEl = document.getElementById('rewardPerTrade');
+
+        function updateCalculator() {
+            const capital = parseInt(capitalInput.value);
+            const tradesPerWeek = parseInt(tradesInput.value);
+            const winRate = parseInt(winrateInput.value) / 100;
+
+            // Format Labels
+            capitalVal.innerText = '₹' + capital.toLocaleString('en-IN');
+            tradesVal.innerText = tradesPerWeek + ' Trades';
+            winrateVal.innerText = Math.round(winRate * 100) + '%';
+
+            // Calculations based on 2% risk per trade and 1:2 Risk-to-Reward Ratio
+            const riskPerTrade = capital * 0.02; // 2% risk
+            const rewardPerTrade = riskPerTrade * 2; // 1:2 reward
+
+            const totalMonthlyTrades = tradesPerWeek * 4;
+            const winningTrades = totalMonthlyTrades * winRate;
+            const losingTrades = totalMonthlyTrades - winningTrades;
+
+            const grossProfit = winningTrades * rewardPerTrade;
+            const grossLoss = losingTrades * riskPerTrade;
+            const netMonthlyProfit = Math.round(grossProfit - grossLoss);
+
+            // Update DOM Output
+            riskPerTradeEl.innerText = '₹' + Math.round(riskPerTrade).toLocaleString('en-IN') + ' (2%)';
+            rewardPerTradeEl.innerText = '₹' + Math.round(rewardPerTrade).toLocaleString('en-IN') + ' (1:2)';
+            
+            if(netMonthlyProfit >= 0) {
+                monthlyProfitEl.innerText = '+₹' + netMonthlyProfit.toLocaleString('en-IN');
+                monthlyProfitEl.className = "text-3xl sm:text-4xl font-black text-brand-green mt-1";
+            } else {
+                monthlyProfitEl.innerText = '-₹' + Math.abs(netMonthlyProfit).toLocaleString('en-IN');
+                monthlyProfitEl.className = "text-3xl sm:text-4xl font-black text-red-500 mt-1";
+            }
+        }
+
+        capitalInput.addEventListener('input', updateCalculator);
+        tradesInput.addEventListener('input', updateCalculator);
+        winrateInput.addEventListener('input', updateCalculator);
+
+        // Initialize Calculator on load
+        updateCalculator();
+
+        // Lead Modal Handler
+        function openModal(planName = 'Trade With Munaaf VIP') {
+            document.getElementById('modalTitle').innerText = 'Enroll in ' + planName;
+            document.getElementById('leadModal').classList.remove('hidden');
+        }
+
+        function closeModal() {
+            document.getElementById('leadModal').classList.add('hidden');
+        }
+
+        // Form Lead Submit Handling
+        function handleLeadSubmit(e) {
+            e.preventDefault();
+            alert('🎉 Thank you! Your request has been received. Redirecting you to Trade With Munaaf Telegram Channel...');
+            closeModal();
+            window.open('https://t.me', '_blank');
+        }
+    </script>
+</body>
+</html>
