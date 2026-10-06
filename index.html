@@ -1,1855 +1,501 @@
 <!DOCTYPE html>
-<html lang="en" class="dark">
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>BullPulse Terminal | Institutional Market Insights & Trading Signals</title>
-  
-  <!-- Tailwind CSS CDN -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  
-  <!-- Google Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  
-  <!-- FontAwesome Icons -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
-  <!-- Chart.js -->
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-  <script>
-    tailwind.config = {
-      darkMode: 'class',
-      theme: {
-        extend: {
-          colors: {
-            terminal: {
-              bg: '#0a0d14',
-              card: '#111622',
-              border: '#1c2436',
-              accent: '#161e2e'
-            },
-            bull: {
-              DEFAULT: '#00e676',
-              glow: 'rgba(0, 230, 118, 0.25)',
-              dark: '#00b050'
-            },
-            bear: {
-              DEFAULT: '#ff5252',
-              glow: 'rgba(255, 82, 82, 0.25)'
-            },
-            cyan: {
-              electric: '#00e5ff'
-            }
-          },
-          fontFamily: {
-            sans: ['Inter', 'sans-serif'],
-            mono: ['JetBrains Mono', 'monospace'],
-          }
-        }
-      }
-    }
-  </script>
-
-  <style>
-    body {
-      background-color: #0a0d14;
-      color: #e2e8f0;
-      font-family: 'Inter', sans-serif;
-      overflow-x: hidden;
-    }
-
-    .font-mono {
-      font-family: 'JetBrains Mono', monospace;
-    }
-
-    .terminal-bg-glow {
-      background: radial-gradient(
-        circle at 50% -10%,
-        rgba(0, 229, 255, 0.12),
-        rgba(0, 230, 118, 0.08) 35%,
-        rgba(10, 13, 20, 1) 75%
-      );
-    }
-
-    .glass-card {
-      background: rgba(17, 22, 34, 0.75);
-      backdrop-filter: blur(14px);
-      border: 1px solid rgba(255, 255, 255, 0.07);
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trade with munaaf - Stock Market Education</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     
-    .glass-card-bull {
-      background: rgba(17, 22, 34, 0.85);
-      backdrop-filter: blur(16px);
-      border: 1px solid rgba(0, 230, 118, 0.3);
-      box-shadow: 0 0 30px -5px rgba(0, 230, 118, 0.15);
-    }
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            blue: '#0088cc',
+                            blueHover: '#0077b5',
+                            lightBg: '#f8fafc',
+                            cardBg: '#ffffff',
+                            textDark: '#0f172a',
+                            textMuted: '#64748b'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'sans-serif']
+                    },
+                    animation: {
+                        'pulse-subtle': 'pulseSubtle 2.5s infinite',
+                        'float': 'float 3s ease-in-out infinite'
+                    },
+                    keyframes: {
+                        pulseSubtle: {
+                            '0%, 100%': { transform: 'scale(1)', boxShadow: '0 10px 25px -5px rgba(0, 136, 204, 0.3)' },
+                            '50%': { transform: 'scale(1.02)', boxShadow: '0 20px 35px -5px rgba(0, 136, 204, 0.5)' }
+                        },
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0px)' },
+                            '50%': { transform: 'translateY(-6px)' }
+                        }
+                    }
+                }
+            }
+        }
+    </script>
 
-    @keyframes tickerScroll {
-      0% { transform: translateX(0); }
-      100% { transform: translateX(-50%); }
-    }
-
-    .animate-ticker {
-      display: flex;
-      width: max-content;
-      animation: tickerScroll 35s linear infinite;
-    }
-
-    .animate-ticker:hover {
-      animation-play-state: paused;
-    }
-
-    @keyframes flashGreen {
-      0% { background-color: rgba(0, 230, 118, 0.4); }
-      100% { background-color: transparent; }
-    }
-
-    @keyframes flashRed {
-      0% { background-color: rgba(255, 82, 82, 0.4); }
-      100% { background-color: transparent; }
-    }
-
-    .flash-up {
-      animation: flashGreen 0.8s ease-out;
-    }
-
-    .flash-down {
-      animation: flashRed 0.8s ease-out;
-    }
-
-    input[type=range] {
-      -webkit-appearance: none;
-      background: #1c2436;
-      border-radius: 8px;
-      height: 6px;
-    }
-
-    input[type=range]::-webkit-slider-thumb {
-      -webkit-appearance: none;
-      height: 18px;
-      width: 18px;
-      border-radius: 50%;
-      background: #00e676;
-      cursor: pointer;
-      box-shadow: 0 0 10px rgba(0, 230, 118, 0.8);
-      transition: transform 0.1s ease;
-    }
-
-    input[type=range]::-webkit-slider-thumb:hover {
-      transform: scale(1.2);
-    }
-
-    .needle-transition {
-      transition: transform 1.2s cubic-bezier(0.34, 1.56, 0.64, 1);
-    }
-  </style>
-
-  <!-- Meta Pixel Code -->
-  <script>
-  !function(f,b,e,v,n,t,s)
-  {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-  n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-  if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-  n.queue=[];t=b.createElement(e);t.async=!0;
-  t.src=v;s=b.getElementsByTagName(e)[0];
-  s.parentNode.insertBefore(t,s)}(window, document,'script',
-  'https://connect.facebook.net/en_US/fbevents.js');
-
-  fbq('init', '1776832123578646');
-  fbq('track', 'PageView');
-  </script>
-
-  <noscript>
-    <img
-      height="1"
-      width="1"
-      style="display:none"
-      src="https://www.facebook.com/tr?id=1776832123578646&ev=PageView&noscript=1"
-    />
-  </noscript>
-  <!-- End Meta Pixel Code -->
+    <style>
+        html { scroll-behavior: smooth; }
+        .tg-gradient-btn {
+            background: linear-gradient(135deg, #229ED9 0%, #0088cc 100%);
+        }
+        .tg-gradient-btn:hover {
+            background: linear-gradient(135deg, #2AABEE 0%, #0077b5 100%);
+        }
+        .custom-card-shadow {
+            box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.07), 0 0 1px 1px rgba(0, 0, 0, 0.05);
+        }
+    </style>
 </head>
+<body class="bg-slate-100 text-slate-800 font-sans min-h-screen flex flex-col justify-between selection:bg-brand-blue selection:text-white">
 
-<body class="antialiased selection:bg-bull selection:text-black pb-20 md:pb-0">
-
-  <!-- Top Live Scrolling Ticker Banner -->
-  <div class="bg-terminal-card border-b border-terminal-border py-2 overflow-hidden relative z-50 select-none">
-    <div class="flex items-center">
-
-      <div class="bg-terminal-bg px-3 py-1 text-[11px] font-mono font-bold text-bull border-r border-terminal-border flex items-center gap-2 shrink-0 z-10 shadow-lg">
-        <span class="w-2 h-2 rounded-full bg-bull animate-ping"></span>
-        <span>LIVE MARKET FEED</span>
-      </div>
-      
-      <div class="overflow-hidden w-full">
-        <div id="ticker-container" class="animate-ticker font-mono text-xs text-gray-300"></div>
-      </div>
-
-    </div>
-  </div>
-
-  <!-- Navigation Bar -->
-  <header class="sticky top-0 z-40 bg-terminal-bg/85 backdrop-blur-md border-b border-terminal-border">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-
-      <a href="#" class="flex items-center gap-3 group">
-        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-bull via-cyan-electric to-emerald-500 p-0.5 shadow-lg shadow-bull/20 group-hover:scale-105 transition-transform">
-          <div class="w-full h-full bg-terminal-bg rounded-[10px] flex items-center justify-center">
-            <i class="fa-solid fa-chart-line text-bull text-lg group-hover:rotate-12 transition-transform duration-300"></i>
-          </div>
-        </div>
-
-        <div>
-          <span id="nav-brand-name" class="font-mono font-extrabold text-xl tracking-wider text-white flex items-center gap-1.5">
-            BULL<span class="text-bull">PULSE</span>
-          </span>
-
-          <span class="text-[9px] font-mono text-gray-400 tracking-widest uppercase block -mt-1">
-            Quant Terminal & Signal Engine
-          </span>
-        </div>
-      </a>
-
-      <nav class="hidden md:flex items-center gap-8 text-xs font-mono text-gray-300">
-        <a href="#sentiment" class="hover:text-bull transition-colors">SENTIMENT GAUGE</a>
-        <a href="#calculator" class="hover:text-bull transition-colors">PROFIT CALCULATOR</a>
-        <a href="#signals" class="hover:text-bull transition-colors">LIVE SIGNALS</a>
-        <a href="#proof" class="hover:text-bull transition-colors">VERIFIED PROOF</a>
-        <a href="#faq" class="hover:text-bull transition-colors">FAQ</a>
-      </nav>
-
-      <div class="flex items-center gap-3">
-        <button
-          onclick="handleTelegramClick()"
-          class="telegram-link inline-flex items-center gap-2 bg-gradient-to-r from-bull to-emerald-500 hover:from-emerald-400 hover:to-teal-400 text-terminal-bg font-mono font-extrabold px-4 py-2 rounded-xl text-xs uppercase tracking-wider shadow-lg shadow-bull/20 hover:shadow-bull/40 transition-all active:scale-95"
-        >
-          <i class="fa-brands fa-telegram text-sm"></i>
-          <span class="hidden sm:inline">Join VIP Terminal</span>
-        </button>
-      </div>
-
-    </div>
-  </header>
-
-  <!-- Hero Section -->
-  <section class="relative terminal-bg-glow pt-8 pb-16 md:pt-16 md:pb-24 overflow-hidden border-b border-terminal-border">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-
-      <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-
-        <div class="lg:col-span-7 space-y-6 text-center lg:text-left">
-
-          <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-terminal-card border border-bull/40 text-bull text-xs font-mono tracking-wider uppercase shadow-md">
-            <span class="w-2 h-2 rounded-full bg-bull animate-pulse"></span>
-            <span id="hero-tag">INSTITUTIONAL GRADE TRADING SIGNALS</span>
-          </div>
-
-          <h1 id="hero-headline" class="text-3xl sm:text-5xl lg:text-6xl font-extrabold text-white tracking-tight leading-tight font-mono">
-            Trade With
-            <span class="text-transparent bg-clip-text bg-gradient-to-r from-bull via-cyan-electric to-emerald-400">
-              Institutional Accuracy
-            </span>
-          </h1>
-
-          <p id="hero-subheadline" class="text-gray-300 text-sm sm:text-base max-w-2xl mx-auto lg:mx-0 leading-relaxed">
-            Join over
-            <span class="text-bull font-mono font-bold" id="stat-hero-traders">
-              35,000+ Active Traders
-            </span>
-            leveraging real-time algorithmic breakout alerts, FII/DII flow analysis, and high-probability options strategies.
-          </p>
-
-          <div class="flex flex-wrap justify-center lg:justify-start gap-3 pt-2">
-
-            <div class="bg-terminal-card/80 border border-terminal-border px-3.5 py-2 rounded-xl flex items-center gap-2 text-xs font-mono">
-              <i class="fa-solid fa-bullseye text-bull"></i>
-              <span class="text-gray-400">Accuracy Rate:</span>
-              <span class="text-white font-bold" id="metric-accuracy">88.6%</span>
+    <!-- Main Header / Navigation Bar -->
+    <header class="sticky top-0 z-50 backdrop-blur-md bg-white/90 border-b border-slate-200/80">
+        <div class="max-w-4xl mx-auto px-4 py-3 flex items-center justify-between">
+            <div class="flex items-center space-x-3 cursor-pointer" onclick="navigateTo('home')">
+                <div class="w-10 h-10 rounded-full bg-gradient-to-tr from-cyan-500 to-brand-blue p-0.5 shadow-md">
+                    <img src="https://placehold.co/100x100/0088cc/ffffff?text=TM" alt="Trade with munaaf" class="w-full h-full object-cover rounded-full">
+                </div>
+                <div>
+                    <span class="font-extrabold text-slate-900 text-base leading-none block">Trade with munaaf</span>
+                    <span class="text-[10px] text-emerald-600 font-bold uppercase tracking-wider">Official Education Channel</span>
+                </div>
             </div>
 
-            <div class="bg-terminal-card/80 border border-terminal-border px-3.5 py-2 rounded-xl flex items-center gap-2 text-xs font-mono">
-              <i class="fa-solid fa-bolt text-cyan-electric"></i>
-              <span class="text-gray-400">Avg. Risk-Reward:</span>
-              <span class="text-white font-bold">1:2.8</span>
-            </div>
+            <!-- Navigation Tabs (Desktop) -->
+            <nav class="hidden md:flex items-center space-x-1 bg-slate-100 p-1 rounded-full border border-slate-200">
+                <button onclick="navigateTo('home')" id="nav-home" class="nav-btn px-4 py-1.5 rounded-full text-xs font-bold transition text-white bg-brand-blue shadow">Home</button>
+                <button onclick="navigateTo('features')" id="nav-features" class="nav-btn px-4 py-1.5 rounded-full text-xs font-bold transition text-slate-600 hover:text-slate-900">Features</button>
+                <button onclick="navigateTo('modules')" id="nav-modules" class="nav-btn px-4 py-1.5 rounded-full text-xs font-bold transition text-slate-600 hover:text-slate-900">Modules</button>
+                <button onclick="navigateTo('reviews')" id="nav-reviews" class="nav-btn px-4 py-1.5 rounded-full text-xs font-bold transition text-slate-600 hover:text-slate-900">Reviews</button>
+                <button onclick="navigateTo('config')" id="nav-config" class="nav-btn px-4 py-1.5 rounded-full text-xs font-bold transition text-slate-600 hover:text-slate-900">Link Config</button>
+            </nav>
 
-            <div class="bg-terminal-card/80 border border-terminal-border px-3.5 py-2 rounded-xl flex items-center gap-2 text-xs font-mono">
-              <i class="fa-solid fa-shield-halved text-bull"></i>
-              <span class="text-gray-400">Strict Stop-Loss</span>
-            </div>
-
-          </div>
-
-          <div class="pt-4 flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4">
-            <button
-              onclick="handleTelegramClick()"
-              class="telegram-link w-full sm:w-auto inline-flex items-center justify-center gap-3 bg-gradient-to-r from-bull via-emerald-500 to-cyan-electric hover:brightness-110 text-terminal-bg font-mono font-black px-8 py-4 rounded-2xl text-sm uppercase tracking-wider shadow-xl shadow-bull/30 transition-all active:scale-95"
-            >
-              <i class="fa-brands fa-telegram text-xl"></i>
-              <span>Get Free VIP Telegram Signals</span>
-              <i class="fa-solid fa-arrow-right text-xs"></i>
-            </button>
-          </div>
-
-          <p class="text-[11px] text-gray-400 font-mono flex items-center justify-center lg:justify-start gap-2">
-            <i class="fa-solid fa-circle-check text-bull"></i>
-            Zero Fees • Real-time Push Notifications • Direct Algo Alerts
-          </p>
-
+            <!-- Quick Action CTA -->
+            <a href="https://t.me/" target="_blank" class="tg-link-btn inline-flex items-center px-4 py-2 rounded-xl text-xs font-bold text-white tg-gradient-btn shadow-md hover:scale-105 transition">
+                <i class="fa-brands fa-telegram text-base mr-1.5"></i>
+                <span>Join Channel</span>
+            </a>
         </div>
 
-        <!-- Right Terminal Mock Card -->
-        <div class="lg:col-span-5 flex justify-center">
+        <!-- Mobile Navigation Menu Bar -->
+        <div class="flex md:hidden border-t border-slate-200/60 overflow-x-auto py-2 px-3 space-x-2 no-scrollbar bg-slate-50">
+            <button onclick="navigateTo('home')" id="mnav-home" class="mnav-btn text-xs font-extrabold px-3 py-1 rounded-lg bg-brand-blue text-white shrink-0">Home</button>
+            <button onclick="navigateTo('features')" id="mnav-features" class="mnav-btn text-xs font-bold px-3 py-1 rounded-lg text-slate-600 shrink-0">Features</button>
+            <button onclick="navigateTo('modules')" id="mnav-modules" class="mnav-btn text-xs font-bold px-3 py-1 rounded-lg text-slate-600 shrink-0">Modules</button>
+            <button onclick="navigateTo('reviews')" id="mnav-reviews" class="mnav-btn text-xs font-bold px-3 py-1 rounded-lg text-slate-600 shrink-0">Reviews</button>
+            <button onclick="navigateTo('config')" id="mnav-config" class="mnav-btn text-xs font-bold px-3 py-1 rounded-lg text-slate-600 shrink-0">Link Config</button>
+        </div>
+    </header>
 
-          <div class="w-full max-w-md">
-
-            <div class="glass-card-bull rounded-2xl p-5 relative overflow-hidden border border-bull/30">
-
-              <div class="flex items-center justify-between border-b border-terminal-border pb-3 mb-4 font-mono text-xs">
-
-                <div class="flex items-center gap-2">
-                  <span class="w-3 h-3 rounded-full bg-red-500/80 inline-block"></span>
-                  <span class="w-3 h-3 rounded-full bg-yellow-500/80 inline-block"></span>
-                  <span class="w-3 h-3 rounded-full bg-bull/80 inline-block"></span>
-                  <span class="text-gray-400 text-[11px] ml-2">BULL-TERMINAL-v4.2</span>
+    <main class="flex-grow py-8 px-4 sm:px-6">
+        
+        <!-- ================= SECTION 1: HOME CARD (MATCHING IMAGE DESIGN) ================= -->
+        <section id="page-home" class="page-section max-w-lg mx-auto">
+            
+            <div class="bg-white rounded-3xl p-6 sm:p-8 custom-card-shadow border border-slate-100 text-center relative overflow-hidden">
+                
+                <!-- Profile Avatar with Gradient Ring -->
+                <div class="relative w-28 h-28 mx-auto mb-4">
+                    <div class="w-full h-full rounded-full bg-gradient-to-tr from-cyan-400 via-brand-blue to-blue-600 p-1 shadow-lg">
+                        <img src="https://placehold.co/200x200/0088cc/ffffff?text=Munaaf" alt="Trade with munaaf Profile" class="w-full h-full object-cover rounded-full border-2 border-white">
+                    </div>
                 </div>
 
-                <span class="text-bull bg-bull/10 px-2 py-0.5 rounded text-[10px] font-bold">
-                  ALGO RUNNING
-                </span>
+                <!-- Channel Name -->
+                <h1 class="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight mb-3">
+                    Trade with munaaf
+                </h1>
 
-              </div>
-
-              <div class="space-y-3 font-mono">
-
-                <div class="flex items-center justify-between">
-                  <span class="text-xs text-gray-400">ACTIVE BREAKOUT CALL</span>
-                  <span class="text-[10px] text-cyan-electric bg-cyan-electric/10 px-2 py-0.5 rounded">
-                    NIFTY 24,500 CE
-                  </span>
-                </div>
-
-                <div class="bg-terminal-bg/80 p-3.5 rounded-xl border border-terminal-border space-y-2">
-
-                  <div class="flex justify-between items-center text-sm">
-                    <span class="font-bold text-white">NIFTY OPTION CALL</span>
-
-                    <span class="text-bull font-bold flex items-center gap-1">
-                      <i class="fa-solid fa-caret-up"></i>
-                      BUY ABOVE
+                <!-- Badges Row -->
+                <div class="flex items-center justify-center space-x-2 mb-5">
+                    <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-extrabold bg-emerald-50 text-emerald-600 border border-emerald-200/70">
+                        <i class="fa-solid fa-check text-[10px] mr-1.5"></i> Official Channel
                     </span>
-                  </div>
-
-                  <div class="grid grid-cols-3 gap-2 text-center text-xs pt-2 border-t border-terminal-border/60">
-
-                    <div>
-                      <span class="text-gray-400 text-[10px] block">ENTRY</span>
-                      <span class="text-white font-bold">₹142.50</span>
-                    </div>
-
-                    <div>
-                      <span class="text-gray-400 text-[10px] block">TARGET</span>
-                      <span class="text-bull font-bold">₹185.00</span>
-                    </div>
-
-                    <div>
-                      <span class="text-gray-400 text-[10px] block">STOP LOSS</span>
-                      <span class="text-bear font-bold">₹124.00</span>
-                    </div>
-
-                  </div>
-
+                    <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-slate-100 text-slate-600 border border-slate-200">
+                        Free to Join
+                    </span>
                 </div>
 
-                <div class="flex items-center justify-between text-xs text-gray-300 pt-1">
+                <!-- Channel Description -->
+                <p class="text-slate-600 text-sm sm:text-base leading-relaxed font-medium mb-6 max-w-sm mx-auto">
+                    Daily stock market sessions — updates, chart reading & trading psychology, explained simply.
+                </p>
 
-                  <span>Probability Score:</span>
-
-                  <div class="flex items-center gap-2">
-
-                    <div class="w-24 bg-terminal-border h-2 rounded-full overflow-hidden">
-                      <div class="bg-gradient-to-r from-bull to-cyan-electric h-full w-[91%]"></div>
-                    </div>
-
-                    <span class="text-bull font-bold text-[11px]">91%</span>
-
-                  </div>
-
+                <!-- Feature Highlighting Box -->
+                <div class="bg-emerald-50/60 border border-emerald-100 rounded-2xl p-3.5 mb-6 text-emerald-900 text-xs sm:text-sm font-semibold flex items-center justify-center space-x-1">
+                    <i class="fa-solid fa-circle-check text-emerald-500 mr-1.5 text-base shrink-0"></i>
+                    <span>Free · Opens directly in Telegram · Leave anytime</span>
                 </div>
 
-                <!-- FIXED TELEGRAM BUTTON -->
-                <button
-                  onclick="handleTelegramClick()"
-                  class="telegram-link w-full bg-bull/10 hover:bg-bull/20 text-bull border border-bull/40 font-bold py-2.5 rounded-xl text-xs flex items-center justify-center gap-2 transition-all"
-                >
-                  <i class="fa-solid fa-lock-open"></i>
-                  <span>UNLOCK LIVE TARGET & TRAILING SL</span>
-                </button>
+                <!-- Primary CTA Prompt -->
+                <div class="text-slate-700 text-xs sm:text-sm font-bold mb-3">
+                    Tap below to join our official Telegram channel
+                </div>
 
-              </div>
+                <!-- Main CTA Button -->
+                <a href="https://t.me/" target="_blank" class="tg-link-btn animate-pulse-subtle w-full py-4 px-6 rounded-2xl text-white font-extrabold text-lg flex items-center justify-center space-x-3 tg-gradient-btn shadow-lg transition active:scale-95 mb-3">
+                    <i class="fa-brands fa-telegram text-2xl"></i>
+                    <span>Join Telegram Channel</span>
+                </a>
 
-            </div>
+                <!-- Security Note -->
+                <div class="flex items-center justify-center text-[11px] text-slate-400 font-medium mb-8">
+                    <i class="fa-solid fa-lock text-[10px] mr-1.5"></i>
+                    <span>Direct Telegram link · nothing to download here</span>
+                </div>
 
-          </div>
+                <!-- Divider & About Header -->
+                <div class="relative flex py-2 items-center mb-4">
+                    <div class="flex-grow border-t border-slate-200"></div>
+                    <span class="flex-shrink mx-4 text-[11px] font-bold tracking-widest text-slate-400 uppercase">ABOUT THIS CHANNEL</span>
+                    <div class="flex-grow border-t border-slate-200"></div>
+                </div>
 
-        </div>
+                <!-- About Description -->
+                <p class="text-xs sm:text-sm text-slate-500 font-medium leading-relaxed mb-6">
+                    Official stock market education channel by <strong class="text-slate-800">Trade with munaaf</strong> — free to join.
+                </p>
 
-      </div>
-
-    </div>
-  </section>
-
-  <!-- Interactive Market Sentiment Gauge Section -->
-  <section id="sentiment" class="py-16 bg-terminal-bg relative border-b border-terminal-border">
-
-    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-
-      <div class="text-center max-w-xl mx-auto mb-10">
-
-        <span class="bg-cyan-electric/10 border border-cyan-electric/30 text-cyan-electric text-xs font-mono uppercase px-3 py-1 rounded-full inline-block mb-2">
-          Real-Time Institutional Flow Index
-        </span>
-
-        <h2 class="text-2xl sm:text-3xl font-extrabold text-white font-mono">
-          Market Sentiment Meter
-        </h2>
-
-        <p class="text-gray-400 text-xs sm:text-sm mt-1">
-          Combining Put-Call Ratio (PCR), FII Net Flow, and VIX volatility metrics.
-        </p>
-
-      </div>
-
-      <div class="glass-card rounded-3xl p-6 sm:p-8 max-w-3xl mx-auto border border-terminal-border">
-
-        <div class="relative w-64 sm:w-80 h-32 sm:h-40 mx-auto overflow-hidden">
-
-          <div class="w-64 sm:w-80 h-64 sm:h-80 rounded-full border-[18px] sm:border-[22px] border-terminal-border border-t-bear border-r-bull border-b-transparent border-l-bear/80 absolute top-0 left-0 rotate-45"></div>
-
-          <div
-            id="gauge-needle"
-            class="w-1.5 h-28 sm:h-36 bg-white absolute bottom-0 left-1/2 -ml-0.75 origin-bottom needle-transition rounded-full shadow-lg shadow-white/50"
-            style="transform: rotate(42deg);"
-          >
-            <div class="w-5 h-5 bg-bull rounded-full absolute top-0 -left-1.75 shadow-md"></div>
-          </div>
-
-          <div class="w-8 h-8 bg-terminal-card border-2 border-white rounded-full absolute bottom-0 left-1/2 -ml-4 z-10"></div>
-
-        </div>
-
-        <div class="flex justify-between max-w-xs sm:max-w-md mx-auto text-xs font-mono pt-2 text-gray-400 font-bold">
-          <span class="text-bear">EXTREME BEARISH</span>
-          <span class="text-yellow-400">NEUTRAL</span>
-          <span class="text-bull">EXTREME BULLISH</span>
-        </div>
-
-        <div class="text-center my-6 space-y-1">
-
-          <div id="sentiment-score" class="text-3xl sm:text-4xl font-extrabold font-mono text-bull">
-            78 / 100
-          </div>
-
-          <div id="sentiment-status" class="text-sm font-mono font-bold text-gray-200 tracking-wider">
-            STRONGLY BULLISH MARKET STRUCTURE
-          </div>
-
-          <p id="sentiment-desc" class="text-xs text-gray-400 max-w-md mx-auto">
-            PCR at 1.34 with aggressive FII long buildup. Calls favoring momentum breakouts.
-          </p>
-
-        </div>
-
-        <div class="flex flex-wrap justify-center gap-3 pt-2">
-
-          <button
-            onclick="refreshSentiment()"
-            class="bg-terminal-card hover:bg-terminal-border border border-terminal-border text-white font-mono text-xs px-5 py-2.5 rounded-xl flex items-center gap-2 transition-all active:scale-95"
-          >
-            <i class="fa-solid fa-rotate text-cyan-electric"></i>
-            <span>Refresh Sentiment Engine</span>
-          </button>
-
-          <button
-            onclick="handleTelegramClick()"
-            class="telegram-link bg-bull/10 hover:bg-bull/20 border border-bull/40 text-bull font-mono text-xs font-bold px-5 py-2.5 rounded-xl flex items-center gap-2 transition-all"
-          >
-            <i class="fa-brands fa-telegram"></i>
-            <span>Get FII/DII Net Positioning Data</span>
-          </button>
-
-        </div>
-
-      </div>
-
-    </div>
-  </section>
-
-  <!-- Interactive Investment / Profit Calculator -->
-  <section id="calculator" class="py-16 bg-terminal-bg/50 relative border-b border-terminal-border">
-
-    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-
-      <div class="text-center max-w-2xl mx-auto mb-12">
-
-        <span class="bg-bull/10 border border-bull/30 text-bull text-xs font-mono uppercase px-3 py-1 rounded-full inline-block mb-2">
-          Compound Wealth Projection
-        </span>
-
-        <h2 class="text-2xl sm:text-4xl font-extrabold text-white font-mono">
-          Interactive Wealth Calculator
-        </h2>
-
-        <p class="text-gray-400 text-xs sm:text-sm mt-1">
-          Simulate compound growth using systematic trading plans or equity investment returns.
-        </p>
-
-      </div>
-
-      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-
-        <div class="lg:col-span-6 glass-card rounded-3xl p-6 sm:p-8 space-y-6 border border-terminal-border">
-
-          <div class="space-y-2">
-
-            <div class="flex justify-between text-xs font-mono">
-              <span class="text-gray-300">Initial Capital (₹)</span>
-              <span id="val-initial" class="text-bull font-bold text-sm">₹50,000</span>
-            </div>
-
-            <input
-              type="range"
-              id="input-initial"
-              min="5000"
-              max="1000000"
-              step="5000"
-              value="50000"
-              class="w-full"
-            />
-
-          </div>
-
-          <div class="space-y-2">
-
-            <div class="flex justify-between text-xs font-mono">
-              <span class="text-gray-300">Monthly Contribution (₹)</span>
-              <span id="val-monthly" class="text-bull font-bold text-sm">₹10,000</span>
-            </div>
-
-            <input
-              type="range"
-              id="input-monthly"
-              min="0"
-              max="100000"
-              step="1000"
-              value="10000"
-              class="w-full"
-            />
-
-          </div>
-
-          <div class="space-y-2">
-
-            <div class="flex justify-between text-xs font-mono">
-              <span class="text-gray-300">Expected Annual Return (%)</span>
-              <span id="val-rate" class="text-cyan-electric font-bold text-sm">22%</span>
-            </div>
-
-            <input
-              type="range"
-              id="input-rate"
-              min="8"
-              max="40"
-              step="1"
-              value="22"
-              class="w-full"
-            />
-
-            <p class="text-[10px] text-gray-400">
-              VIP Algorithmic strategies average 18-28% annual compound growth.
-            </p>
-
-          </div>
-
-          <div class="space-y-2">
-
-            <div class="flex justify-between text-xs font-mono">
-              <span class="text-gray-300">Time Horizon (Years)</span>
-              <span id="val-years" class="text-white font-bold text-sm">5 Years</span>
-            </div>
-
-            <input
-              type="range"
-              id="input-years"
-              min="1"
-              max="25"
-              step="1"
-              value="5"
-              class="w-full"
-            />
-
-          </div>
-
-        </div>
-
-        <div class="lg:col-span-6 glass-card rounded-3xl p-6 sm:p-8 space-y-6 border border-terminal-border flex flex-col justify-between h-full">
-
-          <div class="grid grid-cols-2 gap-4 text-center">
-
-            <div class="bg-terminal-bg p-4 rounded-2xl border border-terminal-border">
-
-              <span class="text-gray-400 text-xs font-mono block mb-1">
-                Total Invested
-              </span>
-
-              <span
-                id="calc-total-invested"
-                class="text-lg sm:text-2xl font-bold font-mono text-white"
-              >
-                ₹6,50,000
-              </span>
+                <!-- Footer Disclaimers -->
+                <div class="pt-4 border-t border-slate-100 text-[11px] text-slate-400 leading-normal space-y-2">
+                    <div>Advertised by <a href="#" class="text-slate-600 hover:underline font-semibold">Ad Build Agency</a></div>
+                    <p class="font-medium">
+                        Educational content only. Not investment, trading or financial advice.<br>
+                        No profit or return is promised or implied. Decisions are your own.
+                    </p>
+                    <div class="flex justify-center space-x-3 text-slate-400 pt-1 font-semibold">
+                        <a href="#page-home" onclick="navigateTo('home')" class="hover:underline">Terms</a>
+                        <span>•</span>
+                        <a href="#page-home" onclick="navigateTo('home')" class="hover:underline">Privacy</a>
+                        <span>•</span>
+                        <a href="#page-home" onclick="navigateTo('home')" class="hover:underline">Disclaimer</a>
+                    </div>
+                    <div class="text-[10px] text-slate-400 pt-2">
+                        © 2026 <strong class="text-slate-500">Trade with munaaf</strong>. All rights reserved.
+                    </div>
+                </div>
 
             </div>
 
-            <div class="bg-terminal-bg p-4 rounded-2xl border border-bull/30">
+        </section>
 
-              <span class="text-gray-400 text-xs font-mono block mb-1">
-                Est. Future Wealth
-              </span>
+        <!-- ================= SECTION 2: KEY FEATURES ================= -->
+        <section id="page-features" class="page-section hidden max-w-3xl mx-auto space-y-6">
+            <div class="text-center mb-8">
+                <span class="px-3 py-1 rounded-full bg-blue-50 text-brand-blue text-xs font-bold uppercase tracking-wider">What You Get</span>
+                <h2 class="text-2xl sm:text-3xl font-black text-slate-900 mt-2">Why Join Trade with munaaf?</h2>
+                <p class="text-slate-600 text-sm mt-1">Simple, actionable, and zero-hype stock market education</p>
+            </div>
 
-              <span
-                id="calc-future-wealth"
-                class="text-lg sm:text-2xl font-bold font-mono text-bull"
-              >
-                ₹11,48,290
-              </span>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                
+                <div class="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-sm flex items-start space-x-4">
+                    <div class="w-12 h-12 rounded-xl bg-blue-50 text-brand-blue flex items-center justify-center text-xl shrink-0">
+                        <i class="fa-solid fa-chart-line"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-slate-900 text-base mb-1">Daily Chart Reading</h3>
+                        <p class="text-slate-600 text-xs sm:text-sm leading-relaxed">Breakdown of Nifty, Bank Nifty, and major stocks with clear support & resistance levels.</p>
+                    </div>
+                </div>
+
+                <div class="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-sm flex items-start space-x-4">
+                    <div class="w-12 h-12 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-xl shrink-0">
+                        <i class="fa-solid fa-brain"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-slate-900 text-base mb-1">Trading Psychology</h3>
+                        <p class="text-slate-600 text-xs sm:text-sm leading-relaxed">Learn risk management, position sizing, and emotional control while trading live market sessions.</p>
+                    </div>
+                </div>
+
+                <div class="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-sm flex items-start space-x-4">
+                    <div class="w-12 h-12 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center text-xl shrink-0">
+                        <i class="fa-solid fa-bolt"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-slate-900 text-base mb-1">Real-time Market Updates</h3>
+                        <p class="text-slate-600 text-xs sm:text-sm leading-relaxed">Stay ahead with instant Telegram alerts on market-moving news and momentum trends.</p>
+                    </div>
+                </div>
+
+                <div class="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-sm flex items-start space-x-4">
+                    <div class="w-12 h-12 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center text-xl shrink-0">
+                        <i class="fa-solid fa-graduation-cap"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-slate-900 text-base mb-1">Beginner Friendly</h3>
+                        <p class="text-slate-600 text-xs sm:text-sm leading-relaxed">Complex trading concepts explained in simple Hindi/English terms without confusing jargon.</p>
+                    </div>
+                </div>
 
             </div>
 
-          </div>
+            <div class="text-center pt-4">
+                <a href="https://t.me/" target="_blank" class="tg-link-btn inline-flex items-center px-8 py-3.5 rounded-2xl text-white font-bold text-base tg-gradient-btn shadow-md hover:scale-105 transition">
+                    <i class="fa-brands fa-telegram text-xl mr-2"></i>
+                    <span>Join Free Telegram Channel</span>
+                </a>
+            </div>
+        </section>
 
-          <div class="relative h-52 sm:h-60 w-full pt-4">
-            <canvas id="calculatorChart"></canvas>
-          </div>
+        <!-- ================= SECTION 3: LEARNING MODULES ================= -->
+        <section id="page-modules" class="page-section hidden max-w-3xl mx-auto space-y-6">
+            <div class="text-center mb-8">
+                <span class="px-3 py-1 rounded-full bg-emerald-50 text-emerald-600 text-xs font-bold uppercase tracking-wider">Free Curriculum</span>
+                <h2 class="text-2xl sm:text-3xl font-black text-slate-900 mt-2">What You Will Learn</h2>
+                <p class="text-slate-600 text-sm mt-1">Structured learning path shared inside the free Telegram channel</p>
+            </div>
 
-          <div class="pt-2 text-center">
+            <div class="space-y-4">
+                
+                <div class="bg-white p-5 rounded-2xl border border-slate-200 flex items-center justify-between">
+                    <div class="flex items-center space-x-4">
+                        <div class="w-10 h-10 rounded-full bg-slate-100 font-extrabold text-slate-700 flex items-center justify-center text-sm">
+                            01
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-slate-900 text-base">Basics of Technical Analysis</h3>
+                            <p class="text-xs text-slate-500">Candlestick patterns, trendlines, and chart patterns</p>
+                        </div>
+                    </div>
+                    <span class="text-xs bg-emerald-100 text-emerald-700 font-bold px-3 py-1 rounded-full">Free Video Guides</span>
+                </div>
 
-            <button
-              onclick="handleTelegramClick()"
-              class="telegram-link w-full bg-gradient-to-r from-bull to-emerald-600 hover:brightness-110 text-terminal-bg font-mono font-extrabold py-3.5 px-4 rounded-xl text-xs uppercase tracking-wider shadow-lg shadow-bull/20 transition-all"
-            >
-              <i class="fa-brands fa-telegram text-base mr-2"></i>
-              Start Executing High Yield Strategies
-            </button>
+                <div class="bg-white p-5 rounded-2xl border border-slate-200 flex items-center justify-between">
+                    <div class="flex items-center space-x-4">
+                        <div class="w-10 h-10 rounded-full bg-slate-100 font-extrabold text-slate-700 flex items-center justify-center text-sm">
+                            02
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-slate-900 text-base">Price Action & Breakout Trading</h3>
+                            <p class="text-xs text-slate-500">Identifying genuine breakouts vs trap movements</p>
+                        </div>
+                    </div>
+                    <span class="text-xs bg-emerald-100 text-emerald-700 font-bold px-3 py-1 rounded-full">Daily Charts</span>
+                </div>
 
-          </div>
+                <div class="bg-white p-5 rounded-2xl border border-slate-200 flex items-center justify-between">
+                    <div class="flex items-center space-x-4">
+                        <div class="w-10 h-10 rounded-full bg-slate-100 font-extrabold text-slate-700 flex items-center justify-center text-sm">
+                            03
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-slate-900 text-base">Option Buying vs Selling Setup</h3>
+                            <p class="text-xs text-slate-500">Understanding Greeks, IV, decay & strategic entries</p>
+                        </div>
+                    </div>
+                    <span class="text-xs bg-blue-100 text-blue-700 font-bold px-3 py-1 rounded-full">Telegram Special</span>
+                </div>
 
-        </div>
-
-      </div>
-
-    </div>
-  </section>
-
-  <!-- Interactive Trading Signal Previewer -->
-  <section id="signals" class="py-16 bg-terminal-bg relative border-b border-terminal-border">
-
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-
-      <div class="text-center max-w-2xl mx-auto mb-10">
-
-        <span class="bg-cyan-electric/10 border border-cyan-electric/30 text-cyan-electric text-xs font-mono uppercase px-3 py-1 rounded-full inline-block mb-2">
-          High Probability Setups
-        </span>
-
-        <h2 class="text-2xl sm:text-4xl font-extrabold text-white font-mono">
-          Live Algo Signal Previewer
-        </h2>
-
-        <p class="text-gray-400 text-xs sm:text-sm mt-1">
-          Filtered by market category and real-time technical momentum triggers.
-        </p>
-
-      </div>
-
-      <div class="flex justify-center gap-2 mb-8 overflow-x-auto pb-2 scrollbar-none font-mono text-xs">
-
-        <button
-          onclick="filterSignals('all', this)"
-          class="signal-tab active-tab bg-bull text-terminal-bg font-bold px-4 py-2.5 rounded-xl transition-all"
-        >
-          ALL SIGNALS
-        </button>
-
-        <button
-          onclick="filterSignals('intraday', this)"
-          class="signal-tab bg-terminal-card border border-terminal-border text-gray-300 hover:text-white px-4 py-2.5 rounded-xl transition-all"
-        >
-          INTRADAY
-        </button>
-
-        <button
-          onclick="filterSignals('options', this)"
-          class="signal-tab bg-terminal-card border border-terminal-border text-gray-300 hover:text-white px-4 py-2.5 rounded-xl transition-all"
-        >
-          OPTIONS BUYING
-        </button>
-
-        <button
-          onclick="filterSignals('swing', this)"
-          class="signal-tab bg-terminal-card border border-terminal-border text-gray-300 hover:text-white px-4 py-2.5 rounded-xl transition-all"
-        >
-          SWING BREAKOUTS
-        </button>
-
-      </div>
-
-      <div id="signals-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
-
-    </div>
-  </section>
-
-  <!-- Community Proof -->
-  <section id="proof" class="py-16 bg-terminal-bg/60 relative border-b border-terminal-border">
-
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-
-      <div class="text-center max-w-2xl mx-auto mb-12">
-
-        <span class="bg-bull/10 border border-bull/30 text-bull text-xs font-mono uppercase px-3 py-1 rounded-full inline-block mb-2">
-          Verified Community Track Record
-        </span>
-
-        <h2 class="text-2xl sm:text-4xl font-extrabold text-white font-mono">
-          Member Profit Statements
-        </h2>
-
-        <p class="text-gray-400 text-xs sm:text-sm mt-1">
-          Real verified P&L screenshots and testimonials shared by active community members.
-        </p>
-
-      </div>
-
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-
-        <!-- Proof Card 1 -->
-        <div class="glass-card rounded-2xl p-5 border border-terminal-border hover:border-bull/40 transition-all space-y-4">
-
-          <div class="flex items-center justify-between">
-
-            <div class="flex items-center gap-3">
-
-              <div class="w-10 h-10 rounded-full bg-bull/20 border border-bull/40 flex items-center justify-center font-mono font-bold text-bull text-sm">
-                RK
-              </div>
-
-              <div>
-                <h4 class="font-mono font-bold text-sm text-white">Rahul K.</h4>
-                <span class="text-[10px] text-gray-400">Options Trader • Verified</span>
-              </div>
+                <div class="bg-white p-5 rounded-2xl border border-slate-200 flex items-center justify-between">
+                    <div class="flex items-center space-x-4">
+                        <div class="w-10 h-10 rounded-full bg-slate-100 font-extrabold text-slate-700 flex items-center justify-center text-sm">
+                            04
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-slate-900 text-base">Risk Management & Stop Loss Rules</h3>
+                            <p class="text-xs text-slate-500">Protecting capital and maintaining positive Risk-to-Reward</p>
+                        </div>
+                    </div>
+                    <span class="text-xs bg-emerald-100 text-emerald-700 font-bold px-3 py-1 rounded-full">PDF Checklists</span>
+                </div>
 
             </div>
 
-            <span class="text-bull font-mono font-extrabold text-sm bg-bull/10 px-2.5 py-1 rounded border border-bull/20">
-              +₹42,800 P&L
-            </span>
+            <div class="text-center pt-4">
+                <a href="https://t.me/" target="_blank" class="tg-link-btn inline-flex items-center px-8 py-3.5 rounded-2xl text-white font-bold text-base tg-gradient-btn shadow-md hover:scale-105 transition">
+                    <i class="fa-brands fa-telegram text-xl mr-2"></i>
+                    <span>Access All Modules Free On Telegram</span>
+                </a>
+            </div>
+        </section>
 
-          </div>
+        <!-- ================= SECTION 4: MEMBER REVIEWS ================= -->
+        <section id="page-reviews" class="page-section hidden max-w-3xl mx-auto space-y-6">
+            <div class="text-center mb-8">
+                <span class="px-3 py-1 rounded-full bg-amber-50 text-amber-600 text-xs font-bold uppercase tracking-wider">Community Feedback</span>
+                <h2 class="text-2xl sm:text-3xl font-black text-slate-900 mt-2">What Members Say</h2>
+                <p class="text-slate-600 text-sm mt-1">Honest reviews from market enthusiasts learning daily</p>
+            </div>
 
-          <p class="text-xs text-gray-300 leading-relaxed font-sans">
-            "Caught the Bank Nifty morning expiry breakout. Entry at ₹110 hit Target 2 at ₹225 in under 35 minutes!"
-          </p>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                
+                <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-between">
+                    <p class="text-xs sm:text-sm text-slate-600 leading-relaxed italic mb-4">
+                        "Munaaf brother's chart breakdown is super clean. No indicator mess, only pure price action. My chart reading improved significantly!"
+                    </p>
+                    <div class="flex items-center space-x-3 pt-3 border-t border-slate-100">
+                        <div class="w-8 h-8 rounded-full bg-blue-100 text-brand-blue flex items-center justify-center font-bold text-xs">
+                            AK
+                        </div>
+                        <div>
+                            <div class="text-xs font-bold text-slate-900">Aman Kumar</div>
+                            <div class="text-[10px] text-slate-400">Telegram Member (6 Months)</div>
+                        </div>
+                    </div>
+                </div>
 
-          <div class="bg-terminal-bg p-3 rounded-xl border border-terminal-border text-[11px] font-mono text-gray-400 flex justify-between">
-            <span>Capital Used: ₹25,000</span>
-            <span class="text-bull">ROI: +171%</span>
-          </div>
-
-        </div>
-
-        <!-- Proof Card 2 -->
-        <div class="glass-card rounded-2xl p-5 border border-terminal-border hover:border-bull/40 transition-all space-y-4">
-
-          <div class="flex items-center justify-between">
-
-            <div class="flex items-center gap-3">
-
-              <div class="w-10 h-10 rounded-full bg-cyan-electric/20 border border-cyan-electric/40 flex items-center justify-center font-mono font-bold text-cyan-electric text-sm">
-                AM
-              </div>
-
-              <div>
-                <h4 class="font-mono font-bold text-sm text-white">Ankit M.</h4>
-                <span class="text-[10px] text-gray-400">Swing Trader • Verified</span>
-              </div>
+                <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-between">
+                    <p class="text-xs sm:text-sm text-slate-600 leading-relaxed italic mb-4">
+                        "The best thing is he teaches risk management first. No fake profit promises or tips. Pure education and real psychology!"
+                    </p>
+                    <div class="flex items-center space-x-3 pt-3 border-t border-slate-100">
+                        <div class="w-8 h-8 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center font-bold text-xs">
+                            PS
+                        </div>
+                        <div>
+                            <div class="text-xs font-bold text-slate-900">Priya Sharma</div>
+                            <div class="text-[10px] text-slate-400">Retail Trader</div>
+                        </div>
+                    </div>
+                </div>
 
             </div>
 
-            <span class="text-bull font-mono font-extrabold text-sm bg-bull/10 px-2.5 py-1 rounded border border-bull/20">
-              +₹1,15,400 P&L
-            </span>
+            <div class="text-center pt-4">
+                <a href="https://t.me/" target="_blank" class="tg-link-btn inline-flex items-center px-8 py-3.5 rounded-2xl text-white font-bold text-base tg-gradient-btn shadow-md hover:scale-105 transition">
+                    <i class="fa-brands fa-telegram text-xl mr-2"></i>
+                    <span>Join Community Channel</span>
+                </a>
+            </div>
+        </section>
 
-          </div>
+        <!-- ================= SECTION 5: TELEGRAM LINK CONFIGURATOR ================= -->
+        <section id="page-config" class="page-section hidden max-w-lg mx-auto">
+            <div class="bg-white rounded-3xl p-6 sm:p-8 custom-card-shadow border border-slate-200">
+                
+                <div class="flex items-center space-x-3 mb-4">
+                    <div class="w-10 h-10 rounded-2xl bg-blue-50 text-brand-blue flex items-center justify-center text-xl shrink-0">
+                        <i class="fa-solid fa-link"></i>
+                    </div>
+                    <div>
+                        <h2 class="text-lg font-black text-slate-900">Telegram Link Settings</h2>
+                        <p class="text-xs text-slate-500">Update destination link for all CTA buttons</p>
+                    </div>
+                </div>
 
-          <p class="text-xs text-gray-300 leading-relaxed font-sans">
-            "Held TATA MOTORS breakout swing call for 6 trading sessions. Perfect trailing stop loss guidance."
-          </p>
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 mb-1.5">Telegram Channel / Invite Link</label>
+                        <input type="url" id="custom-tg-url" placeholder="https://t.me/your_channel_name" value="https://t.me/" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-4 py-3 text-slate-900 text-sm focus:outline-none focus:border-brand-blue">
+                    </div>
 
-          <div class="bg-terminal-bg p-3 rounded-xl border border-terminal-border text-[11px] font-mono text-gray-400 flex justify-between">
-            <span>Capital Used: ₹3,50,000</span>
-            <span class="text-bull">ROI: +32.9%</span>
-          </div>
+                    <button onclick="updateTelegramLinks()" class="w-full py-3.5 px-4 rounded-xl text-white font-bold text-sm tg-gradient-btn shadow-md transition active:scale-98">
+                        Apply Link To All Buttons
+                    </button>
 
-        </div>
+                    <p id="link-status-msg" class="text-xs text-emerald-600 font-bold text-center hidden">
+                        <i class="fa-solid fa-circle-check mr-1"></i> Success! All buttons updated with your Telegram link.
+                    </p>
+                </div>
 
-        <!-- Proof Card 3 -->
-        <div class="glass-card rounded-2xl p-5 border border-terminal-border hover:border-bull/40 transition-all space-y-4">
-
-          <div class="flex items-center justify-between">
-
-            <div class="flex items-center gap-3">
-
-              <div class="w-10 h-10 rounded-full bg-emerald-500/20 border border-emerald-500/40 flex items-center justify-center font-mono font-bold text-emerald-400 text-sm">
-                PS
-              </div>
-
-              <div>
-                <h4 class="font-mono font-bold text-sm text-white">Pooja S.</h4>
-                <span class="text-[10px] text-gray-400">Intraday Trader • Verified</span>
-              </div>
+                <div class="mt-6 pt-5 border-t border-slate-100 text-[11px] text-slate-400 leading-normal">
+                    <strong>How it works:</strong> Paste your official Telegram channel link above and click "Apply". All buttons across the landing page will immediately redirect visitors to your specified Telegram handle.
+                </div>
 
             </div>
+        </section>
 
-            <span class="text-bull font-mono font-extrabold text-sm bg-bull/10 px-2.5 py-1 rounded border border-bull/20">
-              +₹18,250 P&L
-            </span>
+    </main>
 
-          </div>
+    <!-- Floating Bottom Telegram Action CTA Button -->
+    <a href="https://t.me/" target="_blank" class="tg-link-btn fixed bottom-5 right-5 z-40 bg-gradient-to-r from-cyan-500 to-brand-blue text-white p-3.5 sm:px-5 sm:py-3 rounded-full shadow-2xl hover:scale-105 transition flex items-center space-x-2 border border-white/40">
+        <i class="fa-brands fa-telegram text-2xl sm:text-xl"></i>
+        <span class="hidden sm:inline font-bold text-xs">Join Telegram</span>
+    </a>
 
-          <p class="text-xs text-gray-300 leading-relaxed font-sans">
-            "The strict risk management guidelines saved me on choppy market days. Consistent small gains compounding fast."
-          </p>
-
-          <div class="bg-terminal-bg p-3 rounded-xl border border-terminal-border text-[11px] font-mono text-gray-400 flex justify-between">
-            <span>Capital Used: ₹40,000</span>
-            <span class="text-bull">ROI: +45.6%</span>
-          </div>
-
+    <!-- Footer Credit Bar -->
+    <footer class="bg-white border-t border-slate-200 py-4 text-center text-xs text-slate-400">
+        <div class="max-w-4xl mx-auto px-4 flex flex-col sm:flex-row justify-between items-center gap-2">
+            <div>
+                <strong>Trade with munaaf</strong> — Stock Market Education
+            </div>
+            <div class="text-[11px]">
+                Hosted on <span class="font-bold text-slate-600">munaafsitehub.vercel.app</span>
+            </div>
         </div>
-
-      </div>
-    </div>
-  </section>
-
-  <!-- FAQ Section -->
-  <section id="faq" class="py-16 bg-terminal-bg border-b border-terminal-border">
-
-    <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-
-      <div class="text-center mb-10">
-
-        <h2 class="text-2xl sm:text-3xl font-extrabold text-white font-mono">
-          Frequently Asked Questions
-        </h2>
-
-        <p class="text-gray-400 text-xs sm:text-sm mt-1">
-          Clear answers regarding VIP signals and execution
-        </p>
-
-      </div>
-
-      <div class="space-y-3" id="faq-container">
-
-        <div class="glass-card rounded-2xl overflow-hidden border border-terminal-border">
-
-          <button
-            onclick="toggleFaq(1)"
-            class="w-full text-left p-4 sm:p-5 font-mono font-bold text-white text-xs sm:text-sm flex justify-between items-center gap-4 hover:text-bull transition-colors"
-          >
-            <span>1. Are the Telegram signals completely free to join?</span>
-            <i id="faq-icon-1" class="fa-solid fa-chevron-down text-bull text-xs transition-transform duration-200"></i>
-          </button>
-
-          <div
-            id="faq-ans-1"
-            class="hidden px-5 pb-5 text-xs text-gray-300 border-t border-terminal-border/50 pt-3 leading-relaxed"
-          >
-            Yes, our main VIP Telegram Channel provides daily free market analysis, index levels, option chain breakdowns, and select high-probability signal alerts.
-          </div>
-
-        </div>
-
-        <div class="glass-card rounded-2xl overflow-hidden border border-terminal-border">
-
-          <button
-            onclick="toggleFaq(2)"
-            class="w-full text-left p-4 sm:p-5 font-mono font-bold text-white text-xs sm:text-sm flex justify-between items-center gap-4 hover:text-bull transition-colors"
-          >
-            <span>2. How are the trading signals generated?</span>
-            <i id="faq-icon-2" class="fa-solid fa-chevron-down text-bull text-xs transition-transform duration-200"></i>
-          </button>
-
-          <div
-            id="faq-ans-2"
-            class="hidden px-5 pb-5 text-xs text-gray-300 border-t border-terminal-border/50 pt-3 leading-relaxed"
-          >
-            Signals are derived using algorithmic quant models scanning volume breakouts, price action patterns, and real-time institutional FII/DII order flow data.
-          </div>
-
-        </div>
-
-        <div class="glass-card rounded-2xl overflow-hidden border border-terminal-border">
-
-          <button
-            onclick="toggleFaq(3)"
-            class="w-full text-left p-4 sm:p-5 font-mono font-bold text-white text-xs sm:text-sm flex justify-between items-center gap-4 hover:text-bull transition-colors"
-          >
-            <span>3. What capital is required to follow the calls?</span>
-            <i id="faq-icon-3" class="fa-solid fa-chevron-down text-bull text-xs transition-transform duration-200"></i>
-          </button>
-
-          <div
-            id="faq-ans-3"
-            class="hidden px-5 pb-5 text-xs text-gray-300 border-t border-terminal-border/50 pt-3 leading-relaxed"
-          >
-            You can start with as low as ₹10,000 for options buying and equity intraday trades. We advocate strict risk allocation (never risking more than 2-3% per trade).
-          </div>
-
-        </div>
-
-      </div>
-    </div>
-  </section>
-
-  <!-- Footer -->
-  <footer class="bg-terminal-card border-t border-terminal-border py-10 text-xs font-mono">
-
-    <div class="max-w-6xl mx-auto px-4 text-center space-y-6">
-
-      <div class="flex items-center justify-center gap-2">
-        <i class="fa-solid fa-chart-line text-bull"></i>
-        <span class="font-extrabold text-sm text-white">
-          BULLPULSE QUANT TERMINAL
-        </span>
-      </div>
-
-      <div class="bg-terminal-bg p-4 rounded-2xl border border-terminal-border text-[11px] text-gray-400 max-w-3xl mx-auto text-left space-y-2 leading-relaxed">
-
-        <p class="font-bold text-bear uppercase">
-          <i class="fa-solid fa-triangle-exclamation mr-1"></i>
-          SEBI Compliance & Risk Disclosure:
-        </p>
-
-        <p>
-          Trading in Stock Markets, Derivatives (Futures & Options), and Foreign Exchange involves substantial risk of loss and is not suitable for every investor. All analysis, signals, and commentary provided are strictly for educational purposes only. We are not a SEBI Registered Investment Advisor. Please consult a qualified financial advisor before making any investment decisions.
-        </p>
-
-      </div>
-
-      <div class="text-[11px] text-gray-400 pt-4 border-t border-terminal-border">
-        &copy;
-        <span id="year"></span>
-        BullPulse Terminal Analytics. All Rights Reserved.
-      </div>
-
-    </div>
-  </footer>
-
-  <!-- Mobile Sticky Bottom CTA -->
-  <div class="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-terminal-bg/95 backdrop-blur-lg border-t border-bull/40 p-3 flex items-center justify-between gap-3 shadow-2xl">
-
-    <div>
-      <span class="font-mono font-bold text-white text-xs block leading-tight">
-        VIP SIGNAL ALERTS
-      </span>
-
-      <span class="text-[10px] font-mono text-bull">
-        35,000+ Active Members
-      </span>
-    </div>
-
-    <button
-      onclick="handleTelegramClick()"
-      class="telegram-link flex-1 inline-flex items-center justify-center gap-2 bg-gradient-to-r from-bull to-emerald-500 text-terminal-bg font-mono font-extrabold py-3 px-4 rounded-xl text-xs uppercase tracking-wider shadow-md active:scale-95 transition-transform"
-    >
-      <i class="fa-brands fa-telegram text-base"></i>
-      <span>Join Telegram →</span>
-    </button>
-
-  </div>
-
-  <script>
-
-    /* ===================================================
-       CENTRALIZED CONFIGURATION OBJECT
-       =================================================== */
-
-    const CONFIG = {
-      telegramUrl: "https://t.me/+OH5uGAfs19A0MDhl",
-      channelName: "BullPulse Quant VIP",
-      activeTraders: "35,420+",
-      accuracyRate: "88.6%",
-      mainHeadline: "Trade With Institutional Accuracy",
-      brandName: "BULLPULSE"
-    };
-
-
-    /* ===================================================
-       SIMULATED TICKER DATA
-       =================================================== */
-
-    const tickerData = [
-      {
-        symbol: "NIFTY 50",
-        price: 24320.50,
-        change: "+142.30",
-        pct: "+0.59%",
-        isUp: true
-      },
-      {
-        symbol: "BANK NIFTY",
-        price: 52180.10,
-        change: "+380.45",
-        pct: "+0.73%",
-        isUp: true
-      },
-      {
-        symbol: "SENSEX",
-        price: 79820.40,
-        change: "+410.15",
-        pct: "+0.52%",
-        isUp: true
-      },
-      {
-        symbol: "AAPL",
-        price: 224.20,
-        change: "-1.80",
-        pct: "-0.80%",
-        isUp: false
-      },
-      {
-        symbol: "TSLA",
-        price: 254.60,
-        change: "+12.40",
-        pct: "+5.12%",
-        isUp: true
-      },
-      {
-        symbol: "BTC/USD",
-        price: 64200.00,
-        change: "+1150.00",
-        pct: "+1.82%",
-        isUp: true
-      },
-      {
-        symbol: "RELIANCE",
-        price: 3010.25,
-        change: "-14.50",
-        pct: "-0.48%",
-        isUp: false
-      },
-      {
-        symbol: "HDFCBANK",
-        price: 1680.00,
-        change: "+18.20",
-        pct: "+1.09%",
-        isUp: true
-      }
-    ];
-
-
-    /* ===================================================
-       SIMULATED TRADING SIGNALS DATA
-       =================================================== */
-
-    const signalsData = [
-      {
-        id: 1,
-        category: "options",
-        type: "OPTIONS BUYING",
-        symbol: "BANK NIFTY 52,200 CE",
-        action: "BUY",
-        entry: "₹280.00",
-        target: "₹380.00",
-        sl: "₹240.00",
-        rr: "1:2.5",
-        time: "10 mins ago",
-        status: "ACTIVE BREAKOUT"
-      },
-      {
-        id: 2,
-        category: "intraday",
-        type: "EQUITY INTRADAY",
-        symbol: "TATASTEEL",
-        action: "BUY ABOVE",
-        entry: "₹168.50",
-        target: "₹174.00",
-        sl: "₹165.80",
-        rr: "1:2.1",
-        time: "25 mins ago",
-        status: "TARGET 1 NEAR"
-      },
-      {
-        id: 3,
-        category: "swing",
-        type: "SWING BREAKOUT",
-        symbol: "INFY (INFOSYS)",
-        action: "ACCUMULATE",
-        entry: "₹1,820.00",
-        target: "₹1,980.00",
-        sl: "₹1,750.00",
-        rr: "1:2.3",
-        time: "1 hour ago",
-        status: "HOLDING"
-      }
-    ];
-
-
-    /* ===================================================
-       GLOBAL TELEGRAM REDIRECT FUNCTION
-       =================================================== */
-
-    function handleTelegramClick() {
-
-      /*
-        Meta Pixel Lead Event
-      */
-
-      if (typeof fbq === "function") {
-        fbq("track", "Lead");
-      }
-
-      /*
-        Open Telegram Link
-      */
-
-      if (CONFIG.telegramUrl) {
-
-        window.open(
-          CONFIG.telegramUrl,
-          "_blank",
-          "noopener,noreferrer"
-        );
-
-      } else {
-
-        console.warn(
-          "Telegram URL is not configured in CONFIG."
-        );
-
-      }
-    }
-
-
-    /* ===================================================
-       TICKER TAPE GENERATOR
-       =================================================== */
-
-    function initTickerTape() {
-
-      const container =
-        document.getElementById("ticker-container");
-
-      if (!container) return;
-
-      const fullList = [
-        ...tickerData,
-        ...tickerData
-      ];
-
-      container.innerHTML = fullList.map((item, idx) => {
-
-        const colorClass =
-          item.isUp ? "text-bull" : "text-bear";
-
-        const iconClass =
-          item.isUp
-            ? "fa-caret-up"
-            : "fa-caret-down";
-
-        return `
-          <div
-            id="ticker-item-${idx}"
-            class="inline-flex items-center gap-2 px-4 border-r border-terminal-border/60 transition-colors duration-300"
-          >
-            <span class="font-bold text-white">
-              ${item.symbol}
-            </span>
-
-            <span class="ticker-price">
-              ${item.price.toFixed(2)}
-            </span>
-
-            <span class="${colorClass} flex items-center gap-1 font-bold">
-              <i class="fa-solid ${iconClass}"></i>
-              ${item.change} (${item.pct})
-            </span>
-          </div>
-        `;
-
-      }).join("");
-
-
-      setInterval(() => {
-
-        const randomIdx =
-          Math.floor(
-            Math.random() * tickerData.length
-          );
-
-        const delta =
-          (Math.random() - 0.48) * 12;
-
-        tickerData[randomIdx].price += delta;
-
-        tickerData[randomIdx].isUp =
-          delta >= 0;
-
-
-        const elements = [
-
-          document.getElementById(
-            `ticker-item-${randomIdx}`
-          ),
-
-          document.getElementById(
-            `ticker-item-${randomIdx + tickerData.length}`
-          )
-
-        ];
-
-
-        elements.forEach(el => {
-
-          if (el) {
-
-            const priceEl =
-              el.querySelector(".ticker-price");
-
-            if (priceEl) {
-
-              priceEl.innerText =
-                tickerData[randomIdx]
-                  .price
-                  .toFixed(2);
-
+    </footer>
+
+    <script>
+        // Global state for Telegram link URL
+        let currentTelegramUrl = "https://t.me/";
+
+        // Page Navigation Controller
+        function navigateTo(pageId) {
+            // Hide all pages
+            const pages = document.querySelectorAll('.page-section');
+            pages.forEach(page => page.classList.add('hidden'));
+
+            // Show selected page
+            const targetPage = document.getElementById('page-' + pageId);
+            if (targetPage) {
+                targetPage.classList.remove('hidden');
             }
 
-            el.classList.add(
-              delta >= 0
-                ? "flash-up"
-                : "flash-down"
-            );
-
-            setTimeout(() => {
-
-              el.classList.remove(
-                "flash-up",
-                "flash-down"
-              );
-
-            }, 800);
-
-          }
-
-        });
-
-      }, 2500);
-
-    }
-
-
-    /* ===================================================
-       CALCULATOR
-       =================================================== */
-
-    let calcChart;
-
-
-    function initCalculator() {
-
-      const inputInitial =
-        document.getElementById("input-initial");
-
-      const inputMonthly =
-        document.getElementById("input-monthly");
-
-      const inputRate =
-        document.getElementById("input-rate");
-
-      const inputYears =
-        document.getElementById("input-years");
-
-
-      if (!inputInitial) return;
-
-
-      function updateCalculation() {
-
-        const P =
-          parseFloat(inputInitial.value);
-
-        const PMT =
-          parseFloat(inputMonthly.value);
-
-        const annualRate =
-          parseFloat(inputRate.value) / 100;
-
-        const years =
-          parseInt(inputYears.value);
-
-
-        document.getElementById("val-initial")
-          .innerText =
-          `₹${P.toLocaleString("en-IN")}`;
-
-        document.getElementById("val-monthly")
-          .innerText =
-          `₹${PMT.toLocaleString("en-IN")}`;
-
-        document.getElementById("val-rate")
-          .innerText =
-          `${inputRate.value}%`;
-
-        document.getElementById("val-years")
-          .innerText =
-          `${years} ${
-            years === 1
-              ? "Year"
-              : "Years"
-          }`;
-
-
-        const months =
-          years * 12;
-
-        const r =
-          annualRate / 12;
-
-
-        const totalInvested =
-          P + (PMT * months);
-
-
-        const fvInitial =
-          P * Math.pow(
-            1 + r,
-            months
-          );
-
-
-        const fvMonthly =
-          PMT > 0
-            ? PMT *
-              (
-                (
-                  Math.pow(
-                    1 + r,
-                    months
-                  ) - 1
-                ) / r
-              ) *
-              (1 + r)
-            : 0;
-
-
-        const futureWealth =
-          Math.round(
-            fvInitial + fvMonthly
-          );
-
-
-        document.getElementById(
-          "calc-total-invested"
-        ).innerText =
-          `₹${totalInvested.toLocaleString("en-IN")}`;
-
-
-        document.getElementById(
-          "calc-future-wealth"
-        ).innerText =
-          `₹${futureWealth.toLocaleString("en-IN")}`;
-
-
-        updateChart(
-          totalInvested,
-          futureWealth - totalInvested
-        );
-
-      }
-
-
-      [
-        inputInitial,
-        inputMonthly,
-        inputRate,
-        inputYears
-      ].forEach(el => {
-
-        el.addEventListener(
-          "input",
-          updateCalculation
-        );
-
-      });
-
-
-      const ctx =
-        document
-          .getElementById(
-            "calculatorChart"
-          )
-          .getContext("2d");
-
-
-      calcChart =
-        new Chart(ctx, {
-
-          type: "doughnut",
-
-          data: {
-
-            labels: [
-              "Total Invested Capital",
-              "Est. Profit Returns"
-            ],
-
-            datasets: [
-
-              {
-                data: [
-                  50000,
-                  50000
-                ],
-
-                backgroundColor: [
-                  "#1c2436",
-                  "#00e676"
-                ],
-
-                borderWidth: 0,
-
-                hoverOffset: 4
-              }
-
-            ]
-
-          },
-
-          options: {
-
-            responsive: true,
-
-            maintainAspectRatio: false,
-
-            plugins: {
-
-              legend: {
-
-                position: "bottom",
-
-                labels: {
-
-                  color: "#94a3b8",
-
-                  font: {
-                    family: "JetBrains Mono",
-                    size: 11
-                  }
-
-                }
-
-              }
-
-            },
-
-            cutout: "70%"
-
-          }
-
-        });
-
-
-      updateCalculation();
-
-    }
-
-
-    function updateChart(
-      invested,
-      profit
-    ) {
-
-      if (!calcChart) return;
-
-      calcChart.data.datasets[0].data = [
-        invested,
-        Math.max(0, profit)
-      ];
-
-      calcChart.update();
-
-    }
-
-
-    /* ===================================================
-       SENTIMENT METER
-       =================================================== */
-
-    function refreshSentiment() {
-
-      const needle =
-        document.getElementById(
-          "gauge-needle"
-        );
-
-      const scoreEl =
-        document.getElementById(
-          "sentiment-score"
-        );
-
-      const statusEl =
-        document.getElementById(
-          "sentiment-status"
-        );
-
-      const descEl =
-        document.getElementById(
-          "sentiment-desc"
-        );
-
-
-      if (!needle) return;
-
-
-      const randomScore =
-        Math.floor(
-          Math.random() * 40
-        ) + 55;
-
-
-      const angle =
-        (
-          (randomScore / 100) * 180
-        ) - 90;
-
-
-      needle.style.transform =
-        `rotate(${angle}deg)`;
-
-
-      scoreEl.innerText =
-        `${randomScore} / 100`;
-
-
-      if (randomScore >= 75) {
-
-        statusEl.innerText =
-          "STRONGLY BULLISH MARKET STRUCTURE";
-
-        statusEl.className =
-          "text-sm font-mono font-bold text-bull tracking-wider";
-
-        descEl.innerText =
-          "Heavy institutional buying in heavyweights. Breakout probability high.";
-
-      }
-
-      else if (randomScore >= 60) {
-
-        statusEl.innerText =
-          "MODERATELY BULLISH / BUY ON DIPS";
-
-        statusEl.className =
-          "text-sm font-mono font-bold text-cyan-electric tracking-wider";
-
-        descEl.innerText =
-          "Consolidation near resistance with strong support floors intact.";
-
-      }
-
-      else {
-
-        statusEl.innerText =
-          "NEUTRAL / RANGEBOUND";
-
-        statusEl.className =
-          "text-sm font-mono font-bold text-yellow-400 tracking-wider";
-
-        descEl.innerText =
-          "Caution advised. Wait for confirmation above key trigger levels.";
-
-      }
-
-    }
-
-
-    /* ===================================================
-       SIGNALS RENDERER
-       =================================================== */
-
-    function renderSignals(filter = "all") {
-
-      const container =
-        document.getElementById(
-          "signals-grid"
-        );
-
-      if (!container) return;
-
-
-      const filtered =
-        filter === "all"
-          ? signalsData
-          : signalsData.filter(
-              s => s.category === filter
-            );
-
-
-      container.innerHTML =
-        filtered.map(s => `
-
-          <div
-            class="glass-card rounded-2xl p-5 border border-terminal-border hover:border-bull/50 transition-all space-y-4 relative overflow-hidden"
-          >
-
-            <div class="flex items-center justify-between border-b border-terminal-border pb-3">
-
-              <span class="text-[10px] font-mono text-cyan-electric bg-cyan-electric/10 px-2.5 py-1 rounded font-bold">
-                ${s.type}
-              </span>
-
-              <span class="text-[11px] font-mono text-gray-400 flex items-center gap-1">
-                <i class="fa-regular fa-clock"></i>
-                ${s.time}
-              </span>
-
-            </div>
-
-
-            <div class="flex justify-between items-center">
-
-              <div>
-
-                <h3 class="font-mono font-extrabold text-lg text-white">
-                  ${s.symbol}
-                </h3>
-
-                <span class="text-xs font-mono text-bull font-bold">
-                  ${s.action}
-                </span>
-
-              </div>
-
-
-              <span class="text-xs font-mono text-bull bg-bull/10 border border-bull/30 px-2.5 py-1 rounded-full font-bold">
-                ${s.status}
-              </span>
-
-            </div>
-
-
-            <div class="grid grid-cols-3 gap-2 bg-terminal-bg p-3 rounded-xl border border-terminal-border text-center font-mono text-xs">
-
-              <div>
-                <span class="text-gray-400 text-[10px] block">
-                  ENTRY
-                </span>
-
-                <span class="text-white font-bold">
-                  ${s.entry}
-                </span>
-              </div>
-
-
-              <div>
-                <span class="text-gray-400 text-[10px] block">
-                  TARGET
-                </span>
-
-                <span class="text-bull font-bold">
-                  ${s.target}
-                </span>
-              </div>
-
-
-              <div>
-                <span class="text-gray-400 text-[10px] block">
-                  STOP LOSS
-                </span>
-
-                <span class="text-bear font-bold">
-                  ${s.sl}
-                </span>
-              </div>
-
-            </div>
-
-
-            <div class="flex justify-between items-center text-xs font-mono text-gray-300">
-
-              <span>
-                Risk-Reward Ratio:
-                <strong class="text-white">
-                  ${s.rr}
-                </strong>
-              </span>
-
-            </div>
-
-
-            <button
-              onclick="handleTelegramClick()"
-              class="telegram-link w-full bg-bull/10 hover:bg-bull/20 text-bull font-mono font-bold border border-bull/40 py-2.5 rounded-xl text-xs flex items-center justify-center gap-2 transition-all"
-            >
-              <i class="fa-brands fa-telegram"></i>
-              <span>RECEIVE INSTANT TELEGRAM ALERT</span>
-            </button>
-
-          </div>
-
-        `).join("");
-
-    }
-
-
-    function filterSignals(
-      category,
-      button
-    ) {
-
-      document
-        .querySelectorAll(".signal-tab")
-        .forEach(tab => {
-
-          tab.className =
-            "signal-tab bg-terminal-card border border-terminal-border text-gray-300 hover:text-white px-4 py-2.5 rounded-xl transition-all";
-
-        });
-
-
-      if (button) {
-
-        button.className =
-          "signal-tab active-tab bg-bull text-terminal-bg font-bold px-4 py-2.5 rounded-xl transition-all";
-
-      }
-
-
-      renderSignals(category);
-
-    }
-
-
-    /* ===================================================
-       FAQ ACCORDION
-       =================================================== */
-
-    function toggleFaq(id) {
-
-      const ans =
-        document.getElementById(
-          `faq-ans-${id}`
-        );
-
-      const icon =
-        document.getElementById(
-          `faq-icon-${id}`
-        );
-
-
-      if (ans.classList.contains("hidden")) {
-
-        ans.classList.remove("hidden");
-
-        icon.classList.add(
-          "rotate-180"
-        );
-
-      }
-
-      else {
-
-        ans.classList.add("hidden");
-
-        icon.classList.remove(
-          "rotate-180"
-        );
-
-      }
-
-    }
-
-
-    /* ===================================================
-       PAGE SETUP
-       =================================================== */
-
-    document.addEventListener(
-      "DOMContentLoaded",
-      function() {
-
-        document.getElementById(
-          "year"
-        ).textContent =
-          new Date().getFullYear();
-
-
-        const heroTraders =
-          document.getElementById(
-            "stat-hero-traders"
-          );
-
-
-        if (heroTraders) {
-
-          heroTraders.textContent =
-            `${CONFIG.activeTraders} Active Traders`;
-
+            // Desktop Tab Highlight Updates
+            const navButtons = document.querySelectorAll('.nav-btn');
+            navButtons.forEach(btn => {
+                btn.classList.remove('bg-brand-blue', 'text-white', 'shadow');
+                btn.classList.add('text-slate-600', 'hover:text-slate-900');
+            });
+
+            const activeNavBtn = document.getElementById('nav-' + pageId);
+            if (activeNavBtn) {
+                activeNavBtn.classList.remove('text-slate-600', 'hover:text-slate-900');
+                activeNavBtn.classList.add('bg-brand-blue', 'text-white', 'shadow');
+            }
+
+            // Mobile Tab Highlight Updates
+            const mnavButtons = document.querySelectorAll('.mnav-btn');
+            mnavButtons.forEach(btn => {
+                btn.classList.remove('bg-brand-blue', 'text-white');
+                btn.classList.add('text-slate-600');
+            });
+
+            const activeMNavBtn = document.getElementById('mnav-' + pageId);
+            if (activeMNavBtn) {
+                activeMNavBtn.classList.remove('text-slate-600');
+                activeMNavBtn.classList.add('bg-brand-blue', 'text-white');
+            }
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-
-        const accuracy =
-          document.getElementById(
-            "metric-accuracy"
-          );
-
-
-        if (accuracy) {
-
-          accuracy.textContent =
-            CONFIG.accuracyRate;
-
+        // Apply updated Telegram URL across all CTA links
+        function applyTelegramUrl(url) {
+            if (!url) return;
+            currentTelegramUrl = url;
+            const buttons = document.querySelectorAll('.tg-link-btn');
+            buttons.forEach(btn => {
+                btn.setAttribute('href', url);
+            });
         }
 
-
-        const headline =
-          document.getElementById(
-            "hero-headline"
-          );
-
-
-        if (headline) {
-
-          headline.innerHTML =
-            `Trade With <span class="text-transparent bg-clip-text bg-gradient-to-r from-bull via-cyan-electric to-emerald-400">Institutional Accuracy</span>`;
-
+        // Handle link configuration update from Page 5
+        function updateTelegramLinks() {
+            const input = document.getElementById('custom-tg-url');
+            const msg = document.getElementById('link-status-msg');
+            if (input && input.value.trim() !== '') {
+                applyTelegramUrl(input.value.trim());
+                msg.classList.remove('hidden');
+                setTimeout(() => msg.classList.add('hidden'), 3500);
+            }
         }
-
-
-        initTickerTape();
-
-        initCalculator();
-
-        renderSignals("all");
-
-      }
-    );
-
-  </script>
-
+    </script>
 </body>
 </html>
